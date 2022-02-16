@@ -7,6 +7,6 @@ function displayRecipes() {
     //cards creation loop
 }
 
-displayRecipes()
+
 
 
