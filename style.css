@@ -114,7 +114,7 @@ h1 {
 }
 
 h2 {
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .fa-clock {
@@ -132,3 +132,18 @@ h2 {
 .ingredient {
  font-weight: bold;
 }
+
+.cardContent {
+    font-size: 10px;
+}
+
+.cardDescription {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    background:#fff;
+    max-height: 105px;
+  }
+
+
