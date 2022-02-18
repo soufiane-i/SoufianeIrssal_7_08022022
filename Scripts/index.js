@@ -2,6 +2,8 @@
 function displayRecipes(recipeArray) {
     //cards location
 	const cardsSection = document.querySelector('#cardsSection')
+    //Clear Cards Section
+    cardsSection.innerHTML = ''
     //cards creation loop
     recipeArray.forEach((recipe) => {
         cardCreation(recipe)
@@ -89,7 +91,7 @@ function characterCheck()
 {
     if(searchBarInput.value.length >= 3) {
         searchBarFilter()
-    }
+    } else displayRecipes(recipes)
 }
 
 //Filter for search Bar : title, decription and ingredients
