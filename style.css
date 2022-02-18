@@ -48,6 +48,7 @@ h1 {
 }
 
 .form-control:focus, .filter-btn:focus, .keyWord-btn:focus {
+    background-color: #E7E7E7;
     box-shadow: none;
     border-color: transparent;
 }
