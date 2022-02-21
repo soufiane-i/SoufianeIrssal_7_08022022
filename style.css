@@ -89,7 +89,7 @@ h1 {
     margin-right: 20px;
 }
 
-#tags-ingredient input  {
+#tags-ingredients input  {
     background-color: #3282F7;
     color: white;
 }
@@ -241,6 +241,3 @@ h2 {
     color: white;
 }
 
-#tag-ingredient {
-    background-color: #68D9A4;
-}

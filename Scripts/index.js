@@ -82,6 +82,7 @@ function cardCreation(recipe) {
 
 displayRecipes(recipes)
 
+
 //Filter DOM
 let closeFilters = document.querySelectorAll('.filter-close')
 let openFilters = document.querySelectorAll('.filter-open') 
@@ -171,6 +172,7 @@ function characterCheck()
 }
 
 //Filter for search Bar : title, decription and ingredients
+let searchBarRecipe
 function searchBarFilter()
 {
     //Get search bar input value
@@ -186,8 +188,6 @@ function searchBarFilter()
     || ingredientsList(el)
     )
 
-    console.log(results.length);
-
     if (results.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
     } else {
@@ -195,8 +195,19 @@ function searchBarFilter()
         displayRecipes(results)
     }
 
-    
+     searchBarRecipe = results
+     
 }
+
+function tagsChoiceReload(recipe) {
+    const tagsChoiceContainer = document.querySelectorAll('.tagsChoiceContainer')
+    let tagsChoice = document.querySelectorAll('.tagBtn')
+    for (let i = 0; i < tagsChoiceContainer.length; i++) {
+        tagsChoiceContainer[i].innerHTML = ''
+        
+    }
+}
+
 
 //Filter ingredients in a recipeArray to define in paramete
 function ingredientsList(recipeArray)
@@ -204,5 +215,8 @@ function ingredientsList(recipeArray)
     if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
     return false
 }
+
+//Filters actualisation after searchBar utilisation
+
 
 
