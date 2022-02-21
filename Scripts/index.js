@@ -160,6 +160,7 @@ function eraseTagSelected(e) {
 //Get SearchBar Input
 let searchBarInput = document.querySelector('.form-control')
 searchBarInput.addEventListener('input', characterCheck)
+const noRecipeFoundMsg = document.querySelector('.noRecipeFound')
 
 //If at least 3 character in serachBar call filter function, else do nothing
 function characterCheck()
@@ -185,7 +186,16 @@ function searchBarFilter()
     || ingredientsList(el)
     )
 
-    displayRecipes(results)
+    console.log(results.length);
+
+    if (results.length == 0) {
+        noRecipeFoundMsg.classList.remove('close')
+    } else {
+        noRecipeFoundMsg.classList.add('close')
+        displayRecipes(results)
+    }
+
+    
 }
 
 //Filter ingredients in a recipeArray to define in paramete
@@ -194,4 +204,5 @@ function ingredientsList(recipeArray)
     if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
     return false
 }
+
 
