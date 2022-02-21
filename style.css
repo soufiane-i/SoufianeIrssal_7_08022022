@@ -47,67 +47,150 @@ h1 {
     box-shadow: none;
 }
 
-.form-control:focus, .filter-btn:focus, .keyWord-btn:focus {
+#searchBarInput:focus {
     background-color: #E7E7E7;
     box-shadow: none;
     border-color: transparent;
 }
 
-.btn-secondary:focus {
-    background-color: #3282F7;
-}
-
-.keyWord-btn {
+.tag-selected {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
     font-size: 13px;
-    background-color: #3282F7;
     border: none;
+    color: white;
+    margin-bottom: 15px;
 }
 
-.keyWord-btn:hover {
+.tag-input {
+   height: 50px;
+   font-size: 14px;
+   background-color: #3282F7;
+}
+
+.tagInputContainer:focus {
     background-color: #3282F7;
+    box-shadow: none;
+    border-color: transparent;
 }
 
+.tag-input::placeholder {
+    color: white;
+    font-size: 14px;
+
+}
+
+.tagInputContainer {
+    border-bottom-left-radius: 0;
+    position: relative;
+    width: 545px;
+    margin-right: 20px;
+}
+
+#tags-ingredient input  {
+    background-color: #3282F7;
+    color: white;
+}
+
+#tags-appareils input {
+    background-color: #68D9A4;
+}
+
+#btn-appareils-open .tagChoiceContainer  {
+    background-color: #68D9A4;
+    color: white;
+}
+
+#tags-ustenciles input {
+    background-color: #ED6454;
+}
+
+#btn-ustenciles-open .tagChoiceContainer  {
+    background-color: #ED6454;
+    color: white;
+}
+
+
+.tagInputContainer input:focus {
+    background-color: #3282F7;
+    box-shadow: none;
+    border-color: transparent;
+    color: white;
+}
+
+.tagInputContainer input::placeholder {
+    color: white;
+}
+
+.tagInputContainer i {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+}
 
 .fa-circle-xmark {
     margin-left: 5px;
 }
 
-.filter-btn:hover, .keyWord-btn:hover {
+#filters {
+    margin: 0 9.5%;
+    display: flex;
+    flex-direction: row;
+}
+
+.filter-close:hover, .tag-selected:hover {
     color: white;
 }
 
-.filter-btn {
-    margin-right: 20px;
+.filter-close {
     font-size: 14px;
     color: white;
+    height: 60px;
+    width: 15%;
+    margin-right: 20px;
 }
 
-.filter-btn {
+.filter-close {
     padding: 13px;
 } 
 
-.filter-btn:nth-child(1) {
+.filter-close:nth-child(1) {
     background-color: #3282F7;
 }
 
-.filter-btn:nth-child(2) {
+.filter-close:nth-child(3) {
     background-color: #68D9A4;
 }
 
-.filter-btn:nth-child(3) {
+.filter-close:nth-child(5) {
     background-color: #ED6454;
 }
 
-.fa-chevron-down, .fa-regular {
+.fa-chevron-down, .fa-chevron-up, .fa-regular {
     display: inline-block;
     width: 20px;
     height: 18px;
     color: white;
+    cursor: pointer;
+    
+}
+
+.fa-regular {
+    pointer-events: none;
+    width: 15px;
+    transform: translateY(2px);
 }
 
 .fa-chevron-down {
     height: 20px;
     margin-left: 25px;
+    pointer-events: none;
+}
+
+.close {
+    display: none;
 }
 
 .time-section {
@@ -145,6 +228,21 @@ h2 {
     -webkit-box-orient: vertical;
     background:#fff;
     max-height: 105px;
-  }
+}
 
+.tagChoiceContainer {
+    background-color: #3282F7;
+    transform: translateX(12px) translateY(-5px);
+    width: 545px;
+}
+
+.tagBtn {
+    text-align: left;
+    font-size: 12px;
+    color: white;
+}
+
+#tag-ingredient {
+    background-color: #68D9A4;
+}
 

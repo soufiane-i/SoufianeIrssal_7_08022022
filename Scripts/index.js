@@ -82,5 +82,76 @@ function cardCreation(recipe) {
 
 displayRecipes(recipes)
 
+//Filter DOM
+let closeFilters = document.querySelectorAll('.filter-close')
+let openFilters = document.querySelectorAll('.filter-open') 
+let filtersInputContainer = document.querySelectorAll('.tagInputContainer') 
+let openFiltersChevronUp = document.querySelectorAll('.fa-chevron-up')
+
+for (let i = 0; i < closeFilters.length; i++) {
+    closeFilters[i].addEventListener('click', filtersOpen)
+}
+
+for (let i = 0; i < filtersInputContainer.length; i++) {
+    openFiltersChevronUp[i].addEventListener('click', filtersClose)
+}
+
+function filtersOpen(e){
+    let filterCloseTarget = e.target
+    let openFilter = document.querySelector(`#${filterCloseTarget.name}-open`)
+     for (let i = 0; i < openFilters.length; i++) {
+        if(!openFilters[i].classList.contains('close')) {
+            openFilters[i].classList.add('close')
+            closeFilters[i].classList.remove('close')
+        }
+    }
+    openFilter.classList.remove('close')
+    filterCloseTarget.classList.add('close') 
+}
+
+function filtersClose(e){
+    let filterCloseTarget = e.target.parentNode.parentNode
+    console.log(filterCloseTarget);
+    filterCloseTarget.classList.add('close')
+    let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
+    closeFilter.classList.remove('close')
+
+}
 
 
+//DisplayTags
+const tagsContainer = document.querySelector('#tags')
+let tags = document.querySelectorAll('.tagBtn')
+let selectedTags = document.querySelectorAll('.tag-selected')
+
+for (let i = 0; i < tags.length; i++) {
+    tags[i].addEventListener('click', displayTagSelected)
+}
+
+function displayTagSelected(e) {
+    let newTag = document.createElement('button')
+    let tagType = e.target.parentNode.parentNode.parentNode
+    newTag.classList.add('btn', 'tag-selected', 'me-2')
+    newTag.innerHTML = `${e.target.textContent}<i class="fa-regular fa-circle-xmark"></i>`
+    if (tagType.getAttribute('name') === 'btn-ustenciles') {
+        newTag.style.backgroundColor = "#ED6454"
+    } else if (tagType.getAttribute('name') === 'btn-ingredients') {
+        newTag.style.backgroundColor = "#3282F7"
+    } else if (tagType.getAttribute('name') === 'btn-appareils') {
+        newTag.style.backgroundColor = "#68D9A4"
+    }
+    tagsContainer.appendChild(newTag)
+    selectedTags = document.querySelectorAll('.tag-selected')
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTags[i].addEventListener('click', eraseTagSelected)
+    }
+}
+
+for (let i = 0; i < selectedTags.length; i++) {
+    selectedTags[i].addEventListener('click', eraseTagSelected)
+}
+
+function eraseTagSelected(e) {
+    console.log(e.target);
+    e.target.remove()
+}
