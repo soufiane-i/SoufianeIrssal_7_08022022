@@ -179,30 +179,12 @@ function searchBarFilter()
 
     let results = [];
 
-    //Filter in names, decriptions and ingredients
-    results = results.concat(recipes.filter(el => el.name.toLocaleLowerCase().includes(userSearch)))
-    results = results.concat(recipes.filter(el => el.description.toLocaleLowerCase().includes(userSearch)))
-    results = results.concat(recipes.filter(el => ingredientsList(el)))
+    results = recipes.filter(
+        el => el.name.toLocaleLowerCase().includes(userSearch)
+    || el.description.toLocaleLowerCase().includes(userSearch)
+    || ingredientsList(el)
+    )
 
-    
-    for (let i = 0; i < results.length; i++) {
-        console.log(results[i]);
-    }
-
-     for (let i = 0; i < results.length; i++) {
-        for (let j = 0; j < results.length; j++) {
-            if(i === j){
-                continue
-            } else if(results[i].name === results[j].name) {
-                results.splice(j,1)
-                j--
-            }
-        } 
-    } 
-
-    
-
-    console.log(results);
     displayRecipes(results)
 }
 
