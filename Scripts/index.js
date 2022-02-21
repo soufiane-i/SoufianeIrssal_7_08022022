@@ -184,6 +184,25 @@ function searchBarFilter()
     results = results.concat(recipes.filter(el => el.description.toLocaleLowerCase().includes(userSearch)))
     results = results.concat(recipes.filter(el => ingredientsList(el)))
 
+    
+    for (let i = 0; i < results.length; i++) {
+        console.log(results[i]);
+    }
+
+     for (let i = 0; i < results.length; i++) {
+        for (let j = 0; j < results.length; j++) {
+            if(i === j){
+                continue
+            } else if(results[i].name === results[j].name) {
+                results.splice(j,1)
+                j--
+            }
+        } 
+    } 
+
+    
+
+    console.log(results);
     displayRecipes(results)
 }
 
@@ -193,3 +212,4 @@ function ingredientsList(recipeArray)
     if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
     return false
 }
+
