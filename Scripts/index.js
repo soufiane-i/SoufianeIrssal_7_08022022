@@ -187,7 +187,7 @@ function searchBarFilter()
     displayRecipes(results)
 }
 
-//Filter ingredients in a recipeArray to define in parameter
+//Filter ingredients in a recipeArray to define in paramete
 function ingredientsList(recipeArray)
 {
     if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
