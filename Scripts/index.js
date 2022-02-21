@@ -155,3 +155,41 @@ function eraseTagSelected(e) {
     console.log(e.target);
     e.target.remove()
 }
+
+
+//Get SearchBar Input
+let searchBarInput = document.querySelector('.form-control')
+searchBarInput.addEventListener('input', characterCheck)
+
+//If at least 3 character in serachBar call filter function, else do nothing
+function characterCheck()
+{
+    if(searchBarInput.value.length >= 3) {
+        searchBarFilter()
+    } else displayRecipes(recipes)
+}
+
+//Filter for search Bar : title, decription and ingredients
+function searchBarFilter()
+{
+    //Get search bar input value
+    const userSearch = searchBarInput.value.toLowerCase()
+    //Clear Cards Section
+    cardsSection.innerHTML = ''
+
+    let results = [];
+
+    //Filter in names, decriptions and ingredients
+    results = results.concat(recipes.filter(el => el.name.toLocaleLowerCase().includes(userSearch)))
+    results = results.concat(recipes.filter(el => el.description.toLocaleLowerCase().includes(userSearch)))
+    results = results.concat(recipes.filter(el => ingredientsList(el)))
+
+    displayRecipes(results)
+}
+
+//Filter ingredients in a recipeArray to define in parameter
+function ingredientsList(recipeArray)
+{
+    if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
+    return false
+}
