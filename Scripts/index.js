@@ -180,43 +180,93 @@ function searchBarFilter()
     //Clear Cards Section
     cardsSection.innerHTML = ''
 
-    let results = [];
+    let searchBarResults = [];
 
-    results = recipes.filter(
+    searchBarResults = recipes.filter(
         el => el.name.toLocaleLowerCase().includes(userSearch)
     || el.description.toLocaleLowerCase().includes(userSearch)
     || ingredientsList(el)
     )
 
-    if (results.length == 0) {
+    if (searchBarResults.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
     } else {
         noRecipeFoundMsg.classList.add('close')
-        displayRecipes(results)
+        displayRecipes(searchBarResults)
     }
 
-     searchBarRecipe = results
+    tagsAvailable(searchBarResults)
      
 }
 
-function tagsChoiceReload(recipe) {
-    const tagsChoiceContainer = document.querySelectorAll('.tagsChoiceContainer')
-    let tagsChoice = document.querySelectorAll('.tagBtn')
-    for (let i = 0; i < tagsChoiceContainer.length; i++) {
-        tagsChoiceContainer[i].innerHTML = ''
-        
-    }
-}
-
-
-//Filter ingredients in a recipeArray to define in paramete
+//Filter ingredients in a recipeArray to define in parameter
 function ingredientsList(recipeArray)
 {
     if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
     return false
 }
 
-//Filters actualisation after searchBar utilisation
+let filtredUstencils
+let ustencilsArray
+let ustencilsWitoutDuplicates
+let filtredAppliances
+let appliancesWitoutDuplicates
+let filtredIngredients
+let ingredientsArray
+let ingredientsWitoutDuplicates
 
+//Tags Available actualisation
+ function tagsAvailable(recipes) {
+    filtredUstencils = []
+    ustencilsArray = []
+    ustencilsWitoutDuplicates = []
+    filtredAppliances = []
+    appliancesWitoutDuplicates = []
+    filtredIngredients = []
+    ingredientsArray = []
+    ingredientsWitoutDuplicates = []
 
+    filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
+    for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
+    ingredientsWitoutDuplicates = [...new Set(ingredientsArray)]
 
+    filtredAppliances = recipes.map(recipe => recipe.appliance)
+    appliancesWitoutDuplicates = [...new Set(filtredAppliances)]
+
+    filtredUstencils = recipes.map(recipe => recipe.ustensils)
+    for (let i = 0; i < filtredUstencils.length; i++) ustencilsArray.push(...filtredUstencils[i])
+    ustencilsWitoutDuplicates = [...new Set(ustencilsArray)]
+
+    DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustencilsWitoutDuplicates)
+} 
+
+function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustencilesTags) {
+    const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
+    for (let i = 0; i < tagsChoiceContainer.length; i++) {
+        tagsChoiceContainer[i].innerHTML = ''
+    }
+
+    ingredientsTags.forEach(el => {
+        let ingredientTag = document.createElement('div')
+        let tagContainer = document.querySelector('.ingredientsTags')
+        ingredientTag.classList.add('tag', 'col-4', 'mb-1')
+        ingredientTag.innerHTML = el 
+        tagContainer.appendChild(ingredientTag)
+    });
+
+    appliancesTags.forEach(el => {
+        let appliancesTag = document.createElement('div')
+        let tagContainer = document.querySelector('.appliancesTags')
+        appliancesTag.classList.add('tag', 'col-4', 'mb-1')
+        appliancesTag.innerHTML = el 
+        tagContainer.appendChild(appliancesTag)
+    });
+
+    ustencilesTags.forEach(el => {
+        let ustencilesTag = document.createElement('div')
+        let tagContainer = document.querySelector('.ustencilesTags')
+        ustencilesTag.classList.add('tag', 'col-4', 'mb-1')
+        ustencilesTag.innerHTML = el 
+        tagContainer.appendChild(ustencilesTag)
+    });    
+}

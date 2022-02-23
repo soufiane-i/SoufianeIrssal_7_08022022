@@ -26,7 +26,7 @@ h1 {
 .form-control {
     background-color: #E7E7E7;
     font-size: 18px;
-    height: 70px;
+    height: 60px;
 }
 
 .form-control::placeholder {
@@ -126,7 +126,7 @@ h1 {
 
 .tagInputContainer i {
     position: absolute;
-    top: 30px;
+    top: 25px;
     right: 20px;
 }
 
@@ -188,6 +188,10 @@ h1 {
     pointer-events: none;
 }
 
+.chevron-up {
+    transform: ;
+}
+
 .close {
     display: none;
 }
@@ -233,11 +237,18 @@ h2 {
     background-color: #3282F7;
     transform: translateX(12px) translateY(-5px);
     width: 545px;
+    position: relative;
+    z-index: 1;
 }
 
-.tagBtn {
+.tag {
     text-align: left;
     font-size: 12px;
     color: white;
+    cursor: pointer;
+}
+
+.filter-open {
+    height: 50px;
 }
 
