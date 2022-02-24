@@ -187,12 +187,12 @@ function searchBarFilter()
 
 let ingredientsTagsSelection
 let appliancesTagsSelection
-let ustencilsTagsSelection
+let ustensilsTagsSelection
 
  function tagsAvailable(recipes) {
-    let filtredUstencils = []
-    let ustencilsArray = []
-    let ustencilsWitoutDuplicates = []
+    let filtredUstensils = []
+    let ustensilsArray = []
+    let ustensilsWitoutDuplicates = []
     let filtredAppliances = []
     let appliancesWitoutDuplicates = []
     let filtredIngredients = []
@@ -206,14 +206,14 @@ let ustencilsTagsSelection
     filtredAppliances = recipes.map(recipe => recipe.appliance)
     appliancesWitoutDuplicates = [...new Set(filtredAppliances)]
 
-    filtredUstencils = recipes.map(recipe => recipe.ustensils)
-    for (let i = 0; i < filtredUstencils.length; i++) ustencilsArray.push(...filtredUstencils[i])
-    ustencilsWitoutDuplicates = [...new Set(ustencilsArray)]
+    filtredUstensils = recipes.map(recipe => recipe.ustensils)
+    for (let i = 0; i < filtredUstensils.length; i++) ustensilsArray.push(...filtredUstensils[i])
+    ustensilsWitoutDuplicates = [...new Set(ustensilsArray)]
 
-    DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustencilsWitoutDuplicates)
+    DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustensilsWitoutDuplicates)
 } 
 
-function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustencilesTags) {
+function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
     const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
     for (let i = 0; i < tagsChoiceContainer.length; i++) {
         tagsChoiceContainer[i].innerHTML = ''
@@ -241,20 +241,20 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustencilesTags) {
         tagContainer.appendChild(appliancesTag)
     })
 
-    ustencilesTags.forEach(el => {
-        let ustencilesTag = document.createElement('div')
-        let ustencileTagTitle = document.createElement('span')
-        let tagContainer = document.querySelector('.ustencilesTags')
-        ustencilesTag.classList.add('tag', 'col-4', 'mb-1')
-        ustencileTagTitle.classList.add('ustencileTag')
-        ustencileTagTitle.innerHTML = el 
-        ustencilesTag.appendChild(ustencileTagTitle)
-        tagContainer.appendChild(ustencilesTag)
+    ustensilesTags.forEach(el => {
+        let ustensilesTag = document.createElement('div')
+        let ustensileTagTitle = document.createElement('span')
+        let tagContainer = document.querySelector('.ustensilesTags')
+        ustensilesTag.classList.add('tag', 'col-4', 'mb-1')
+        ustensileTagTitle.classList.add('ustensileTag')
+        ustensileTagTitle.innerHTML = el 
+        ustensilesTag.appendChild(ustensileTagTitle)
+        tagContainer.appendChild(ustensilesTag)
     })   
 
     ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
     appliancesTagsSelection = document.querySelectorAll('.applianceTag')
-    ustencilsTagsSelection = document.querySelectorAll('.ustencileTag')
+    ustensilsTagsSelection = document.querySelectorAll('.ustensileTag')
 
     for (let i = 0; i < ingredientsTagsSelection.length; i++) {
         ingredientsTagsSelection[i].addEventListener('click', filterByTag)
@@ -264,27 +264,26 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustencilesTags) {
         appliancesTagsSelection[i].addEventListener('click', filterByTag)
     }
 
-    for (let i = 0; i < ustencilsTagsSelection.length; i++) {
-        ustencilsTagsSelection[i].addEventListener('click', filterByTag)
+    for (let i = 0; i < ustensilsTagsSelection.length; i++) {
+        ustensilsTagsSelection[i].addEventListener('click', filterByTag)
     }
 }
 
 function filterByTag(e) {
     let newResults = []
     let tagType = e.target
-    //newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
-    //newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
-    newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))/*     if(tagType.classList.contains('ingredientTag')) {
-        results = results.filter( el => e.target.textContent == ingredientsTagsList(el,e.target.textContent))
-    
-    } */
+    if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
+    if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
+    if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+
+
     console.log(newResults);
     cardsSection.innerHTML = ''
 
     results = [];
 
     results = newResults
-    console.log(results);
+    console.log(tagType);
     displayTagSelected(e)
     displayRecipes(results)
 }
@@ -294,7 +293,7 @@ function displayTagSelected(e) {
     let tagType = e.target
     newTag.classList.add('btn', 'tag-selected', 'me-2')
     newTag.innerHTML = `${e.target.textContent}<i class="fa-regular fa-circle-xmark"></i>`
-    if (tagType.classList.contains('ustencileTag')) {
+    if (tagType.classList.contains('ustensileTag')) {
         newTag.style.backgroundColor = "#ED6454"
     } else if (tagType.classList.contains('ingredientTag')) {
         newTag.style.backgroundColor = "#3282F7"
