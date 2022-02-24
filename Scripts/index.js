@@ -129,25 +129,6 @@ for (let i = 0; i < tags.length; i++) {
     tags[i].addEventListener('click', displayTagSelected)
 }
 
-function displayTagSelected(e) {
-    let newTag = document.createElement('button')
-    let tagType = e.target.parentNode.parentNode.parentNode
-    newTag.classList.add('btn', 'tag-selected', 'me-2')
-    newTag.innerHTML = `${e.target.textContent}<i class="fa-regular fa-circle-xmark"></i>`
-    if (tagType.getAttribute('name') === 'btn-ustenciles') {
-        newTag.style.backgroundColor = "#ED6454"
-    } else if (tagType.getAttribute('name') === 'btn-ingredients') {
-        newTag.style.backgroundColor = "#3282F7"
-    } else if (tagType.getAttribute('name') === 'btn-appareils') {
-        newTag.style.backgroundColor = "#68D9A4"
-    }
-    tagsContainer.appendChild(newTag)
-    selectedTags = document.querySelectorAll('.tag-selected')
-    for (let i = 0; i < selectedTags.length; i++) {
-        selectedTags[i].addEventListener('click', eraseTagSelected)
-    }
-}
-
 for (let i = 0; i < selectedTags.length; i++) {
     selectedTags[i].addEventListener('click', eraseTagSelected)
 }
@@ -160,6 +141,7 @@ function eraseTagSelected(e) {
 
 //Get SearchBar Input
 let searchBarInput = document.querySelector('.form-control')
+let results
 searchBarInput.addEventListener('input', characterCheck)
 const noRecipeFoundMsg = document.querySelector('.noRecipeFound')
 
@@ -180,51 +162,42 @@ function searchBarFilter()
     //Clear Cards Section
     cardsSection.innerHTML = ''
 
-    let searchBarResults = [];
+    results = [];
 
-    searchBarResults = recipes.filter(
+    results = recipes.filter(
         el => el.name.toLocaleLowerCase().includes(userSearch)
     || el.description.toLocaleLowerCase().includes(userSearch)
-    || ingredientsList(el)
+    || ingredientsList(el, searchBarInput.value)
     )
 
-    if (searchBarResults.length == 0) {
+    if (results.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
     } else {
         noRecipeFoundMsg.classList.add('close')
-        displayRecipes(searchBarResults)
+        displayRecipes(results)
     }
 
-    tagsAvailable(searchBarResults)
+    tagsAvailable(results)
      
 }
 
-//Filter ingredients in a recipeArray to define in parameter
-function ingredientsList(recipeArray)
-{
-    if (recipeArray.ingredients.find(el => el.ingredient.includes(searchBarInput.value.toLowerCase()))) return true
-    return false
-}
 
-let filtredUstencils
-let ustencilsArray
-let ustencilsWitoutDuplicates
-let filtredAppliances
-let appliancesWitoutDuplicates
-let filtredIngredients
-let ingredientsArray
-let ingredientsWitoutDuplicates
 
 //Tags Available actualisation
+
+let ingredientsTagsSelection
+let appliancesTagsSelection
+let ustencilsTagsSelection
+
  function tagsAvailable(recipes) {
-    filtredUstencils = []
-    ustencilsArray = []
-    ustencilsWitoutDuplicates = []
-    filtredAppliances = []
-    appliancesWitoutDuplicates = []
-    filtredIngredients = []
-    ingredientsArray = []
-    ingredientsWitoutDuplicates = []
+    let filtredUstencils = []
+    let ustencilsArray = []
+    let ustencilsWitoutDuplicates = []
+    let filtredAppliances = []
+    let appliancesWitoutDuplicates = []
+    let filtredIngredients = []
+    let ingredientsArray = []
+    let ingredientsWitoutDuplicates = []
 
     filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
     for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
@@ -248,25 +221,97 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustencilesTags) {
 
     ingredientsTags.forEach(el => {
         let ingredientTag = document.createElement('div')
+        let ingredientTagTitle = document.createElement('span')
         let tagContainer = document.querySelector('.ingredientsTags')
         ingredientTag.classList.add('tag', 'col-4', 'mb-1')
-        ingredientTag.innerHTML = el 
+        ingredientTagTitle.classList.add('ingredientTag')
+        ingredientTagTitle.innerHTML = el 
+        ingredientTag.appendChild(ingredientTagTitle)
         tagContainer.appendChild(ingredientTag)
-    });
+    })
 
     appliancesTags.forEach(el => {
         let appliancesTag = document.createElement('div')
         let tagContainer = document.querySelector('.appliancesTags')
+        let applianceTagTitle = document.createElement('span')
         appliancesTag.classList.add('tag', 'col-4', 'mb-1')
-        appliancesTag.innerHTML = el 
+        applianceTagTitle.classList.add('applianceTag')
+        applianceTagTitle.innerHTML = el 
+        appliancesTag.appendChild(applianceTagTitle)
         tagContainer.appendChild(appliancesTag)
-    });
+    })
 
     ustencilesTags.forEach(el => {
         let ustencilesTag = document.createElement('div')
+        let ustencileTagTitle = document.createElement('span')
         let tagContainer = document.querySelector('.ustencilesTags')
         ustencilesTag.classList.add('tag', 'col-4', 'mb-1')
-        ustencilesTag.innerHTML = el 
+        ustencileTagTitle.classList.add('ustencileTag')
+        ustencileTagTitle.innerHTML = el 
+        ustencilesTag.appendChild(ustencileTagTitle)
         tagContainer.appendChild(ustencilesTag)
-    });    
+    })   
+
+    ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
+    appliancesTagsSelection = document.querySelectorAll('.applianceTag')
+    ustencilsTagsSelection = document.querySelectorAll('.ustencileTag')
+
+    for (let i = 0; i < ingredientsTagsSelection.length; i++) {
+        ingredientsTagsSelection[i].addEventListener('click', filterByTag)
+    }
+
+    for (let i = 0; i < appliancesTagsSelection.length; i++) {
+        appliancesTagsSelection[i].addEventListener('click', filterByTag)
+    }
+
+    for (let i = 0; i < ustencilsTagsSelection.length; i++) {
+        ustencilsTagsSelection[i].addEventListener('click', filterByTag)
+    }
+}
+
+function filterByTag(e) {
+    let newResults = []
+    let tagType = e.target
+    //newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+    //newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+    newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))/*     if(tagType.classList.contains('ingredientTag')) {
+        results = results.filter( el => e.target.textContent == ingredientsTagsList(el,e.target.textContent))
+    
+    } */
+    console.log(newResults);
+    cardsSection.innerHTML = ''
+
+    results = [];
+
+    results = newResults
+    console.log(results);
+    displayTagSelected(e)
+    displayRecipes(results)
+}
+
+function displayTagSelected(e) {
+    let newTag = document.createElement('button')
+    let tagType = e.target
+    newTag.classList.add('btn', 'tag-selected', 'me-2')
+    newTag.innerHTML = `${e.target.textContent}<i class="fa-regular fa-circle-xmark"></i>`
+    if (tagType.classList.contains('ustencileTag')) {
+        newTag.style.backgroundColor = "#ED6454"
+    } else if (tagType.classList.contains('ingredientTag')) {
+        newTag.style.backgroundColor = "#3282F7"
+    } else if (tagType.classList.contains('applianceTag')) {
+        newTag.style.backgroundColor = "#68D9A4"
+    }
+    tagsContainer.appendChild(newTag)
+    selectedTags = document.querySelectorAll('.tag-selected')
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTags[i].addEventListener('click', eraseTagSelected)
+    }
+}
+
+
+//Filter ingredients in a recipeArray to define in parameter
+function ingredientsList(recipe, tag)
+{
+    if (recipe.ingredients.find(object => object.ingredient.includes(tag))) return true
+    return false
 }
