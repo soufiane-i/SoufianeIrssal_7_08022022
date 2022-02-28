@@ -1,3 +1,4 @@
+let results
 //Display Recipes with datas
 function displayRecipes(recipeArray) {
     //cards location
@@ -9,6 +10,7 @@ function displayRecipes(recipeArray) {
         cardCreation(recipe)
     })
 }
+
 
 //HTML and CSS Card Creation
 function cardCreation(recipe) {
@@ -133,15 +135,10 @@ for (let i = 0; i < selectedTags.length; i++) {
     selectedTags[i].addEventListener('click', eraseTagSelected)
 }
 
-function eraseTagSelected(e) {
-    console.log(e.target);
-    e.target.remove()
-}
-
 
 //Get SearchBar Input
 let searchBarInput = document.querySelector('.form-control')
-let results
+
 searchBarInput.addEventListener('input', characterCheck)
 const noRecipeFoundMsg = document.querySelector('.noRecipeFound')
 
@@ -154,7 +151,9 @@ function characterCheck()
 }
 
 //Filter for search Bar : title, decription and ingredients
+
 let searchBarRecipe
+let resultsSearchNTags
 function searchBarFilter()
 {
     //Get search bar input value
@@ -178,6 +177,37 @@ function searchBarFilter()
     }
 
     tagsAvailable(results)
+
+    let tagsSelected = document.querySelectorAll('.tag-selected')
+    console.log(tagsSelected[0]);
+    resultsSearchNTags = []
+
+
+
+ 
+
+    if (tagsSelected.length == 0) {
+        if (results.length == 0) {
+            noRecipeFoundMsg.classList.remove('close')
+        } else {
+            noRecipeFoundMsg.classList.add('close')
+            displayRecipes(results)
+        }
+    } else {
+        if (resultsSearchNTags.length == 0) {
+            noRecipeFoundMsg.classList.remove('close')
+        } else {
+            noRecipeFoundMsg.classList.add('close')
+            for (let i = 0; i < tagsSelected.length; i++) {
+                if (tagsSelected[i].classList.contains('ingredientTagSelected')) resultsSearchNTags = results.concat(results.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent)))
+                if (tagsSelected[i].classList.contains('applianceTagSelected')) resultsSearchNTags = results.concat(results.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent)))
+                if (tagsSelected[i].classList.contains('ustensileTagSelected')) resultsSearchNTags = results.concat(results.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent)))
+            }
+            displayRecipes(resultsSearchNTags)
+        }
+    }
+
+    
      
 }
 
@@ -188,16 +218,26 @@ function searchBarFilter()
 let ingredientsTagsSelection
 let appliancesTagsSelection
 let ustensilsTagsSelection
+let filtredUstensils = []
+let ustensilsArray = []
+let ustensilsWitoutDuplicates = []
+let filtredAppliances = []
+let appliancesWitoutDuplicates = []
+let filtredIngredients = []
+let ingredientsArray = []
+let ingredientsWitoutDuplicates = []
+
+tagsAvailable(recipes)
 
  function tagsAvailable(recipes) {
-    let filtredUstensils = []
-    let ustensilsArray = []
-    let ustensilsWitoutDuplicates = []
-    let filtredAppliances = []
-    let appliancesWitoutDuplicates = []
-    let filtredIngredients = []
-    let ingredientsArray = []
-    let ingredientsWitoutDuplicates = []
+    filtredUstensils = []
+    ustensilsArray = []
+    ustensilsWitoutDuplicates = []
+    filtredAppliances = []
+    appliancesWitoutDuplicates = []
+    filtredIngredients = []
+    ingredientsArray = []
+    ingredientsWitoutDuplicates = []
 
     filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
     for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
@@ -214,6 +254,11 @@ let ustensilsTagsSelection
 } 
 
 function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
+
+    let tagSelected = document.querySelectorAll('.tag-selected')
+
+    console.log(tagSelected.length);
+
     const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
     for (let i = 0; i < tagsChoiceContainer.length; i++) {
         tagsChoiceContainer[i].innerHTML = ''
@@ -252,12 +297,100 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
         tagContainer.appendChild(ustensilesTag)
     })   
 
+    tagsSelection()
+
+
+
+
+}
+
+function filterByTag(e) {
+    console.log(results);
+    if (results == undefined) {
+        results = recipes
+    }
+
+    characterCheck()
+
+
+    let newResults = []
+    let tagType = e.target
+    if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
+    if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
+    if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+
+    cardsSection.innerHTML = ''
+
+    results = [];
+
+    results = newResults
+    displayTagSelected(e)
+    displayRecipes(results)
+    tagsAvailable(results)
+}
+
+function displayTagSelected(e) {
+    let newTag = document.createElement('div')
+    let tagType = e.target
+    let tagContainer = e.target.parentNode
+    newTag.classList.add('btn', 'tag-selected', 'me-2')
+    newTag.innerHTML = `<span>${e.target.textContent}</span<i class="fa-regular fa-circle-xmark"></i>`
+    if (tagType.classList.contains('ustensileTag')) {
+        newTag.style.backgroundColor = "#ED6454"
+        newTag.classList.add('ustensileTagSelected')
+    } else if (tagType.classList.contains('ingredientTag')) {
+        newTag.classList.add('ingredientTagSelected')
+        newTag.style.backgroundColor = "#3282F7"
+    } else if (tagType.classList.contains('applianceTag')) {
+        newTag.classList.add('applianceTagSelected')
+        newTag.style.backgroundColor = "#68D9A4"
+    }
+    tagsContainer.appendChild(newTag)
+    selectedTags = document.querySelectorAll('.tag-selected')
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTags[i].addEventListener('click', eraseTagSelected)
+    }
+    tagContainer.remove()
+}
+
+
+//Filter ingredients in a recipeArray to define in parameter
+function ingredientsList(recipe, tag)
+{
+    if (recipe.ingredients.find(object => object.ingredient.includes(tag))) return true
+    return false
+}
+
+
+function eraseTagSelected(e) {
+    console.log(e.target);
+    e.target.parentNode.remove()
+    console.log(results);
+    searchBarFilter(results)
+    tagsAvailable(results)
+}
+
+function tagsSelection() {
     ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
     appliancesTagsSelection = document.querySelectorAll('.applianceTag')
     ustensilsTagsSelection = document.querySelectorAll('.ustensileTag')
 
+    let tagSelected = document.querySelectorAll('.tag-selected')
+
     for (let i = 0; i < ingredientsTagsSelection.length; i++) {
         ingredientsTagsSelection[i].addEventListener('click', filterByTag)
+
+        if(tagSelected.length == 0) {
+
+        } else if (tagSelected.length > 0){
+            for (let j = 0; j < tagSelected.length; j++) {
+                if(ingredientsTagsSelection[i].textContent == tagSelected[j].firstChild.textContent) {
+                    console.log(tagSelected[j].firstChild);
+                    ingredientsTagsSelection[i].parentNode.remove()
+                }
+                
+            }
+        }
     }
 
     for (let i = 0; i < appliancesTagsSelection.length; i++) {
@@ -269,48 +402,5 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
     }
 }
 
-function filterByTag(e) {
-    let newResults = []
-    let tagType = e.target
-    if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
-    if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
-    if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
-
-
-    console.log(newResults);
-    cardsSection.innerHTML = ''
-
-    results = [];
-
-    results = newResults
-    console.log(tagType);
-    displayTagSelected(e)
-    displayRecipes(results)
-}
-
-function displayTagSelected(e) {
-    let newTag = document.createElement('button')
-    let tagType = e.target
-    newTag.classList.add('btn', 'tag-selected', 'me-2')
-    newTag.innerHTML = `${e.target.textContent}<i class="fa-regular fa-circle-xmark"></i>`
-    if (tagType.classList.contains('ustensileTag')) {
-        newTag.style.backgroundColor = "#ED6454"
-    } else if (tagType.classList.contains('ingredientTag')) {
-        newTag.style.backgroundColor = "#3282F7"
-    } else if (tagType.classList.contains('applianceTag')) {
-        newTag.style.backgroundColor = "#68D9A4"
-    }
-    tagsContainer.appendChild(newTag)
-    selectedTags = document.querySelectorAll('.tag-selected')
-    for (let i = 0; i < selectedTags.length; i++) {
-        selectedTags[i].addEventListener('click', eraseTagSelected)
-    }
-}
-
-
-//Filter ingredients in a recipeArray to define in parameter
-function ingredientsList(recipe, tag)
-{
-    if (recipe.ingredients.find(object => object.ingredient.includes(tag))) return true
-    return false
-}
+tagsSelection()
+characterCheck()
