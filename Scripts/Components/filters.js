@@ -6,7 +6,7 @@ let openFiltersChevronUp = document.querySelectorAll('.fa-chevron-up')
 
 let tagsContainer = document.querySelector('#tags')
 let tags = document.querySelectorAll('.tagBtn')
-let selectedTags = document.querySelectorAll('.tag-selected')
+
 
 for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
 for (let i = 0; i < filtersInputContainer.length; i++) openFiltersChevronUp[i].addEventListener('click', filtersClose)
@@ -178,22 +178,41 @@ function displayTagSelected(e) {
 
 
 function filterByTag(e) {
+    
+    let newResults = []
+    
     if (results == undefined) {
         results = recipes
     }
+    if (e == undefined) {
+        
+        let tagsSelected = document.querySelectorAll('.tag-selected')
+       
+        for (let i = 0; i < tagsSelected.length; i++) {
+            if (tagsSelected[i].classList.contains('ingredientTagSelected')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent)))
+            if (tagsSelected[i].classList.contains('applianceTagSelected')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent)))
+            if (tagsSelected[i].classList.contains('ustensileTagSelected')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent)))
+        }
+          
+            
+    } else {
+        
+        let tagType = e.target
 
-    let newResults = []
-    let tagType = e.target
-    if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
-    if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
-    if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+        if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
+        if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
+        if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+    }
 
     cardsSection.innerHTML = ''
 
     results = [];
 
-    results = newResults
-    displayTagSelected(e)
+    results = [...new Set(newResults)]
+    if(e == undefined) {
+
+    } else     displayTagSelected(e)
+
     displayRecipes(results)
     tagsAvailable(results)
 }

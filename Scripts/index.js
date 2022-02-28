@@ -1,6 +1,6 @@
 let results
 let tagsSelected
-
+let selectedTags = document.querySelectorAll('.tag-selected')
 
 //Display Recipes with datas
 function displayRecipes(recipeArray) {

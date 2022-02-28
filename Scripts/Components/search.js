@@ -1,3 +1,4 @@
+
 //Get SearchBar Input
 let searchBarRecipe
 let searchBarInput = document.querySelector('.form-control')
@@ -12,40 +13,49 @@ function characterCheck()
     if(searchBarInput.value.length >= 3) {
         searchBarFilter()
     } else {
-        displayRecipes(recipes)
-        tagsSelection()
-        tagsAvailable(recipes)
+
     } 
 }
 
 //Filter for search Bar : title, decription and ingredients
 function searchBarFilter()
 {
+    
     //Get search bar input value
     const userSearch = searchBarInput.value.toLowerCase()
     //Clear Cards Section
     cardsSection.innerHTML = ''
     let tagsSelected = document.querySelectorAll('.tag-selected')
-    console.log(tagsSelected);
-    results = [];
-    let resultsSearchNTags = []
+    let newResults = []
+    if (tagsSelected.length == 0) {
+        results = recipes.filter(
+            el => el.name.toLocaleLowerCase().includes(userSearch)
+        || el.description.toLocaleLowerCase().includes(userSearch)
+        || ingredientsList(el, searchBarInput.value)
+        )
+    } else {
+        if (results.length == 0) {
+            results = recipes.filter(
+                el => el.name.toLocaleLowerCase().includes(userSearch)
+            || el.description.toLocaleLowerCase().includes(userSearch)
+            || ingredientsList(el, searchBarInput.value)
+            )
+        } else {
+        newResults = results.filter(
+            el => el.name.toLocaleLowerCase().includes(userSearch)
+        || el.description.toLocaleLowerCase().includes(userSearch)
+        || ingredientsList(el, searchBarInput.value)
+        )
+        results = newResults
+        }
+    }
 
-    results = recipes.filter(
-        el => el.name.toLocaleLowerCase().includes(userSearch)
-    || el.description.toLocaleLowerCase().includes(userSearch)
-    || ingredientsList(el, searchBarInput.value)
-    )
-    
+
+  
     if (tagsSelected.length == 0) {
     } else 
     {
-        
-        for (let i = 0; i < tagsSelected.length; i++) {
-            if (tagsSelected[i].classList.contains('ingredientTagSelected')) resultsSearchNTags = resultsSearchNTags.concat(results.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent)))
-            if (tagsSelected[i].classList.contains('applianceTagSelected')) resultsSearchNTags = resultsSearchNTags.concat(results.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent)))
-            if (tagsSelected[i].classList.contains('ustensileTagSelected')) resultsSearchNTags = resultsSearchNTags.concat(results.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent)))
-        }
-            results = resultsSearchNTags
+        filterByTag()
     }
 
     if (results.length == 0) {
