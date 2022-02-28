@@ -4,6 +4,10 @@ let openFilters = document.querySelectorAll('.filter-open')
 let filtersInputContainer = document.querySelectorAll('.tagInputContainer') 
 let openFiltersChevronUp = document.querySelectorAll('.fa-chevron-up')
 
+let tagsContainer = document.querySelector('#tags')
+let tags = document.querySelectorAll('.tagBtn')
+let selectedTags = document.querySelectorAll('.tag-selected')
+
 for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
 for (let i = 0; i < filtersInputContainer.length; i++) openFiltersChevronUp[i].addEventListener('click', filtersClose)
 
@@ -26,3 +30,173 @@ function filtersClose(e){
     let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
     closeFilter.classList.remove('close')
 }
+
+function eraseTagSelected(e) {
+    e.target.parentNode.remove()
+    searchBarFilter(results)
+    tagsAvailable(results)
+    tagsSelection(results)
+}
+
+//Tags Available actualisation
+
+let ingredientsTagsSelection
+let appliancesTagsSelection
+let ustensilsTagsSelection
+let filtredUstensils = []
+let ustensilsArray = []
+let ustensilsWitoutDuplicates = []
+let filtredAppliances = []
+let appliancesWitoutDuplicates = []
+let filtredIngredients = []
+let ingredientsArray = []
+let ingredientsWitoutDuplicates = []
+
+tagsAvailable(recipes)
+
+ function tagsAvailable(recipes) {
+    filtredUstensils = []
+    ustensilsArray = []
+    ustensilsWitoutDuplicates = []
+    filtredAppliances = []
+    appliancesWitoutDuplicates = []
+    filtredIngredients = []
+    ingredientsArray = []
+    ingredientsWitoutDuplicates = []
+
+    filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
+    for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
+    ingredientsWitoutDuplicates = [...new Set(ingredientsArray)]
+
+    filtredAppliances = recipes.map(recipe => recipe.appliance)
+    appliancesWitoutDuplicates = [...new Set(filtredAppliances)]
+
+    filtredUstensils = recipes.map(recipe => recipe.ustensils)
+    for (let i = 0; i < filtredUstensils.length; i++) ustensilsArray.push(...filtredUstensils[i])
+    ustensilsWitoutDuplicates = [...new Set(ustensilsArray)]
+
+    DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustensilsWitoutDuplicates)
+} 
+
+function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
+
+    const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
+    for (let i = 0; i < tagsChoiceContainer.length; i++) {
+        tagsChoiceContainer[i].innerHTML = ''
+    }
+
+    ingredientsTags.forEach(el => {
+        let ingredientTag = document.createElement('div')
+        let ingredientTagTitle = document.createElement('span')
+        let tagContainer = document.querySelector('.ingredientsTags')
+        ingredientTag.classList.add('tag', 'col-4', 'mb-1')
+        ingredientTagTitle.classList.add('ingredientTag')
+        ingredientTagTitle.innerHTML = el 
+        ingredientTag.appendChild(ingredientTagTitle)
+        tagContainer.appendChild(ingredientTag)
+    })
+
+    appliancesTags.forEach(el => {
+        let appliancesTag = document.createElement('div')
+        let tagContainer = document.querySelector('.appliancesTags')
+        let applianceTagTitle = document.createElement('span')
+        appliancesTag.classList.add('tag', 'col-4', 'mb-1')
+        applianceTagTitle.classList.add('applianceTag')
+        applianceTagTitle.innerHTML = el 
+        appliancesTag.appendChild(applianceTagTitle)
+        tagContainer.appendChild(appliancesTag)
+    })
+
+    ustensilesTags.forEach(el => {
+        let ustensilesTag = document.createElement('div')
+        let ustensileTagTitle = document.createElement('span')
+        let tagContainer = document.querySelector('.ustensilesTags')
+        ustensilesTag.classList.add('tag', 'col-4', 'mb-1')
+        ustensileTagTitle.classList.add('ustensileTag')
+        ustensileTagTitle.innerHTML = el 
+        ustensilesTag.appendChild(ustensileTagTitle)
+        tagContainer.appendChild(ustensilesTag)
+    })   
+
+    tagsSelection()
+}
+
+function tagsSelection() {
+    ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
+    appliancesTagsSelection = document.querySelectorAll('.applianceTag')
+    ustensilsTagsSelection = document.querySelectorAll('.ustensileTag')
+
+    let tagSelected = document.querySelectorAll('.tag-selected')
+
+    for (let i = 0; i < ingredientsTagsSelection.length; i++) {
+        ingredientsTagsSelection[i].addEventListener('click', filterByTag)
+
+        if(tagSelected.length == 0) {
+
+        } else if (tagSelected.length > 0){
+            for (let j = 0; j < tagSelected.length; j++) {
+                if(ingredientsTagsSelection[i].textContent == tagSelected[j].firstChild.textContent) {
+                    ingredientsTagsSelection[i].parentNode.remove()
+                }
+                
+            }
+        }
+    }
+
+    for (let i = 0; i < appliancesTagsSelection.length; i++) {
+        appliancesTagsSelection[i].addEventListener('click', filterByTag)
+    }
+
+    for (let i = 0; i < ustensilsTagsSelection.length; i++) {
+        ustensilsTagsSelection[i].addEventListener('click', filterByTag)
+    }
+}
+
+function displayTagSelected(e) {
+    let newTag = document.createElement('div')
+    let tagType = e.target
+    let tagContainer = e.target.parentNode
+    newTag.classList.add('btn', 'tag-selected', 'me-2')
+    newTag.innerHTML = `<span>${e.target.textContent}</span<i class="fa-regular fa-circle-xmark"></i>`
+    if (tagType.classList.contains('ustensileTag')) {
+        newTag.style.backgroundColor = "#ED6454"
+        newTag.classList.add('ustensileTagSelected')
+    } else if (tagType.classList.contains('ingredientTag')) {
+        newTag.classList.add('ingredientTagSelected')
+        newTag.style.backgroundColor = "#3282F7"
+    } else if (tagType.classList.contains('applianceTag')) {
+        newTag.classList.add('applianceTagSelected')
+        newTag.style.backgroundColor = "#68D9A4"
+    }
+    tagsContainer.appendChild(newTag)
+    selectedTags = document.querySelectorAll('.tag-selected')
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTags[i].addEventListener('click', eraseTagSelected)
+    }
+    tagContainer.remove()
+}
+
+
+function filterByTag(e) {
+    if (results == undefined) {
+        results = recipes
+    }
+
+    let newResults = []
+    let tagType = e.target
+    if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
+    if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
+    if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
+
+    cardsSection.innerHTML = ''
+
+    results = [];
+
+    results = newResults
+    displayTagSelected(e)
+    displayRecipes(results)
+    tagsAvailable(results)
+}
+
+
+tagsSelection()
