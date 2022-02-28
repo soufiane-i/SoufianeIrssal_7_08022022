@@ -1,4 +1,11 @@
+
 let results
+let searchBarRecipe
+
+let tagsContainer = document.querySelector('#tags')
+let tags = document.querySelectorAll('.tagBtn')
+let selectedTags = document.querySelectorAll('.tag-selected')
+
 //Display Recipes with datas
 function displayRecipes(recipeArray) {
     //cards location
@@ -6,138 +13,18 @@ function displayRecipes(recipeArray) {
     //Clear Cards Section
     cardsSection.innerHTML = ''
     //cards creation loop
-    recipeArray.forEach((recipe) => {
-        cardCreation(recipe)
-    })
-}
-
-
-//HTML and CSS Card Creation
-function cardCreation(recipe) {
-    let cardContainer1 = document.createElement('div')
-    let cardContainer2 = document.createElement('div')
-    let cardImg = document.createElement('img')
-    let cardBody = document.createElement('div')
-    let cardBodyHead = document.createElement('div')
-    let cardBodyContent = document.createElement('div')
-    let cardTitleContainer = document.createElement('div')
-    let cardTitle = document.createElement('h2')
-    let cardTimeContainer = document.createElement('div')
-    let cardIngredients = document.createElement('div')
-    let cardDescription = document.createElement('div')
-    let cardListGroup = document.createElement('ul')
-
-    cardContainer1.classList.add('col-4', 'my-4', 'px-4')
-    cardContainer2.classList.add('card', 'w-100')
-    cardImg.setAttribute('src', './Assets/img-placeholder.png')
-    cardBody.classList.add('card-body')
-    cardBodyHead.classList.add('row', 'cardHead')
-    cardBodyContent.classList.add('row', 'cardContent')
-    cardTitleContainer.classList.add('col-8')
-    cardTimeContainer.classList.add('col-3', 'd-flex', 'align-items-center', 'justify-content-end', 'pe-0',  'time-section')
-    cardBodyContent.classList.add('row')
-    cardIngredients.classList.add('col-6')
-    cardDescription.classList.add('col-6', 'cardDescription')
-    cardListGroup.classList.add('list-group')
-
-    cardTitle.innerHTML = recipe.name
-    cardTimeContainer.innerHTML = `<i class="fa-regular fa-clock fa-lg me-2"></i>
-    <p><span class="time">${recipe.time}</span> min</p>`
-    cardDescription.innerHTML = recipe.description
-    recipe.ingredients.forEach((ingredientArray) => {
-        let ingredientGroup = document.createElement('li')
-        let ingredientSpan = document.createElement('span')
-
-        let ingredient = ingredientArray.ingredient
-        let quantity = ingredientArray.quantity
-        let unit = ingredientArray.unit
-        ingredientGroup.classList.add('list-group-item', 'border-0', 'py-0', 'px-0')
-        ingredientSpan.innerHTML = ingredient
-        ingredientGroup.appendChild(ingredientSpan)
-        if (!(quantity == undefined)) {
-            let quantitySpan = document.createElement('span')
-            quantitySpan.innerHTML = ': ' + quantity
-            ingredientGroup.appendChild(quantitySpan)
-        }
-
-        if (!(unit == undefined)) {
-            let unitSpan = document.createElement('span')
-            unitSpan.innerHTML = ' ' + unit
-            ingredientGroup.appendChild(unitSpan)
-        } else {}
-        cardListGroup.appendChild(ingredientGroup)
-    })
-
-    cardsSection.appendChild(cardContainer1)
-    cardContainer1.appendChild(cardContainer2)
-    cardContainer2.appendChild(cardImg)
-    cardContainer2.appendChild(cardBody)
-    cardBody.appendChild(cardBodyHead)
-    cardBody.appendChild(cardBodyContent)
-    cardBodyHead.appendChild(cardTitleContainer)
-    cardBodyHead.appendChild(cardTimeContainer)
-    cardTitleContainer.appendChild(cardTitle)
-    cardBodyContent.appendChild(cardIngredients)
-    cardBodyContent.appendChild(cardDescription)
-    cardIngredients.appendChild(cardListGroup)
+    recipeArray.forEach((recipe) => { cardCreation(recipe) })
 }
 
 displayRecipes(recipes)
 
-
-//Filter DOM
-let closeFilters = document.querySelectorAll('.filter-close')
-let openFilters = document.querySelectorAll('.filter-open') 
-let filtersInputContainer = document.querySelectorAll('.tagInputContainer') 
-let openFiltersChevronUp = document.querySelectorAll('.fa-chevron-up')
-
-for (let i = 0; i < closeFilters.length; i++) {
-    closeFilters[i].addEventListener('click', filtersOpen)
-}
-
-for (let i = 0; i < filtersInputContainer.length; i++) {
-    openFiltersChevronUp[i].addEventListener('click', filtersClose)
-}
-
-function filtersOpen(e){
-    let filterCloseTarget = e.target
-    let openFilter = document.querySelector(`#${filterCloseTarget.name}-open`)
-     for (let i = 0; i < openFilters.length; i++) {
-        if(!openFilters[i].classList.contains('close')) {
-            openFilters[i].classList.add('close')
-            closeFilters[i].classList.remove('close')
-        }
-    }
-    openFilter.classList.remove('close')
-    filterCloseTarget.classList.add('close') 
-}
-
-function filtersClose(e){
-    let filterCloseTarget = e.target.parentNode.parentNode
-    console.log(filterCloseTarget);
-    filterCloseTarget.classList.add('close')
-    let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
-    closeFilter.classList.remove('close')
-
-}
-
-
 //DisplayTags
-const tagsContainer = document.querySelector('#tags')
-let tags = document.querySelectorAll('.tagBtn')
-let selectedTags = document.querySelectorAll('.tag-selected')
-
-for (let i = 0; i < tags.length; i++) {
-    tags[i].addEventListener('click', displayTagSelected)
-}
-
-for (let i = 0; i < selectedTags.length; i++) {
-    selectedTags[i].addEventListener('click', eraseTagSelected)
-}
-
+for (let i = 0; i < tags.length; i++) tags[i].addEventListener('click', displayTagSelected)
+for (let i = 0; i < selectedTags.length; i++) selectedTags[i].addEventListener('click', eraseTagSelected)
 
 //Get SearchBar Input
 let searchBarInput = document.querySelector('.form-control')
+searchBarInput.value = ''
 
 searchBarInput.addEventListener('input', characterCheck)
 const noRecipeFoundMsg = document.querySelector('.noRecipeFound')
@@ -151,17 +38,16 @@ function characterCheck()
 }
 
 //Filter for search Bar : title, decription and ingredients
-
-let searchBarRecipe
-let resultsSearchNTags
 function searchBarFilter()
 {
     //Get search bar input value
     const userSearch = searchBarInput.value.toLowerCase()
     //Clear Cards Section
     cardsSection.innerHTML = ''
-
+    let tagsSelected = document.querySelectorAll('.tag-selected')
+    console.log(tagsSelected);
     results = [];
+    let resultsSearchNTags = []
 
     results = recipes.filter(
         el => el.name.toLocaleLowerCase().includes(userSearch)
@@ -169,46 +55,32 @@ function searchBarFilter()
     || ingredientsList(el, searchBarInput.value)
     )
 
+    console.log(results);
+    
+    if (tagsSelected.length == 0) {
+    } else 
+    {
+        
+        for (let i = 0; i < tagsSelected.length; i++) {
+            if (tagsSelected[i].classList.contains('ingredientTagSelected')) resultsSearchNTags = resultsSearchNTags.concat(results.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent)))
+            if (tagsSelected[i].classList.contains('applianceTagSelected')) resultsSearchNTags = resultsSearchNTags.concat(results.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent)))
+            if (tagsSelected[i].classList.contains('ustensileTagSelected')) resultsSearchNTags = resultsSearchNTags.concat(results.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent)))
+        }
+            results = resultsSearchNTags
+    }
+
+    console.log(results);
+
     if (results.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
     } else {
         noRecipeFoundMsg.classList.add('close')
         displayRecipes(results)
     }
+    
 
     tagsAvailable(results)
-
-    let tagsSelected = document.querySelectorAll('.tag-selected')
-    console.log(tagsSelected[0]);
-    resultsSearchNTags = []
-
-
-
  
-
-    if (tagsSelected.length == 0) {
-        if (results.length == 0) {
-            noRecipeFoundMsg.classList.remove('close')
-        } else {
-            noRecipeFoundMsg.classList.add('close')
-            displayRecipes(results)
-        }
-    } else {
-        if (resultsSearchNTags.length == 0) {
-            noRecipeFoundMsg.classList.remove('close')
-        } else {
-            noRecipeFoundMsg.classList.add('close')
-            for (let i = 0; i < tagsSelected.length; i++) {
-                if (tagsSelected[i].classList.contains('ingredientTagSelected')) resultsSearchNTags = results.concat(results.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent)))
-                if (tagsSelected[i].classList.contains('applianceTagSelected')) resultsSearchNTags = results.concat(results.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent)))
-                if (tagsSelected[i].classList.contains('ustensileTagSelected')) resultsSearchNTags = results.concat(results.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent)))
-            }
-            displayRecipes(resultsSearchNTags)
-        }
-    }
-
-    
-     
 }
 
 
@@ -256,8 +128,6 @@ tagsAvailable(recipes)
 function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
 
     let tagSelected = document.querySelectorAll('.tag-selected')
-
-    console.log(tagSelected.length);
 
     const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
     for (let i = 0; i < tagsChoiceContainer.length; i++) {
@@ -385,7 +255,6 @@ function tagsSelection() {
         } else if (tagSelected.length > 0){
             for (let j = 0; j < tagSelected.length; j++) {
                 if(ingredientsTagsSelection[i].textContent == tagSelected[j].firstChild.textContent) {
-                    console.log(tagSelected[j].firstChild);
                     ingredientsTagsSelection[i].parentNode.remove()
                 }
                 
@@ -403,4 +272,3 @@ function tagsSelection() {
 }
 
 tagsSelection()
-characterCheck()
