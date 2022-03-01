@@ -7,6 +7,19 @@ let openFiltersChevronUp = document.querySelectorAll('.fa-chevron-up')
 let tagsContainer = document.querySelector('#tags')
 let tags = document.querySelectorAll('.tagBtn')
 
+//Tags Available actualisation
+
+let ingredientsTagsSelection
+let appliancesTagsSelection
+let ustensilsTagsSelection
+let filtredUstensils = []
+let ustensilsArray = []
+let ustensilsWitoutDuplicates = []
+let filtredAppliances = []
+let appliancesWitoutDuplicates = []
+let filtredIngredients = []
+let ingredientsArray = []
+let ingredientsWitoutDuplicates = []
 
 for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
 for (let i = 0; i < filtersInputContainer.length; i++) openFiltersChevronUp[i].addEventListener('click', filtersClose)
@@ -33,28 +46,16 @@ function filtersClose(e){
 
 function eraseTagSelected(e) {
     e.target.parentNode.remove()
-    searchBarFilter(results)
+    filterByTag()
+    tagsSelection()
     tagsAvailable(results)
-    tagsSelection(results)
 }
 
-//Tags Available actualisation
 
-let ingredientsTagsSelection
-let appliancesTagsSelection
-let ustensilsTagsSelection
-let filtredUstensils = []
-let ustensilsArray = []
-let ustensilsWitoutDuplicates = []
-let filtredAppliances = []
-let appliancesWitoutDuplicates = []
-let filtredIngredients = []
-let ingredientsArray = []
-let ingredientsWitoutDuplicates = []
 
-tagsAvailable(recipes)
 
- function tagsAvailable(recipes) {
+//Refresh tags available data
+function tagsAvailable(recipes) {
     filtredUstensils = []
     ustensilsArray = []
     ustensilsWitoutDuplicates = []
@@ -78,6 +79,7 @@ tagsAvailable(recipes)
     DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustensilsWitoutDuplicates)
 } 
 
+// Display tags availabe
 function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
 
     const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
@@ -121,12 +123,13 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
     tagsSelection()
 }
 
+// refresh Tags selection make its clickable 
 function tagsSelection() {
     ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
     appliancesTagsSelection = document.querySelectorAll('.applianceTag')
     ustensilsTagsSelection = document.querySelectorAll('.ustensileTag')
 
-    let tagSelected = document.querySelectorAll('.tag-selected')
+    tagSelected = document.querySelectorAll('.tag-selected')
 
     for (let i = 0; i < ingredientsTagsSelection.length; i++) {
         ingredientsTagsSelection[i].addEventListener('click', filterByTag)
@@ -178,40 +181,41 @@ function displayTagSelected(e) {
 
 
 function filterByTag(e) {
+    const userSearch = searchBarInput.value.toLowerCase()
+
+
+    newResults = []
     
-    let newResults = []
     
-    if (results == undefined) {
+    if (results.length == 0) {
         results = recipes
     }
     if (e == undefined) {
-        
-        let tagsSelected = document.querySelectorAll('.tag-selected')
-       
-        for (let i = 0; i < tagsSelected.length; i++) {
-            if (tagsSelected[i].classList.contains('ingredientTagSelected')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent)))
-            if (tagsSelected[i].classList.contains('applianceTagSelected')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent)))
-            if (tagsSelected[i].classList.contains('ustensileTagSelected')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent)))
-        }
-          
-            
-    } else {
-        
-        let tagType = e.target
+        newResults = recipes.filter(
+            el => el.name.toLocaleLowerCase().includes(userSearch)
+            || el.description.toLocaleLowerCase().includes(userSearch)
+            || ingredientsList(el, searchBarInput.value)
+        )
+    
+        tagsSelected = document.querySelectorAll('.tag-selected')
 
+        for (let i = 0; i < tagsSelected.length; i++) {
+            if (tagsSelected[i].classList.contains('ingredientTagSelected')) newResults = newResults.filter(recipe => ingredientsList(recipe, tagsSelected[i].firstChild.textContent))
+            if (tagsSelected[i].classList.contains('applianceTagSelected')) newResults = newResults.filter(recipe => recipe.appliance.includes(tagsSelected[i].firstChild.textContent))
+            if (tagsSelected[i].classList.contains('ustensileTagSelected')) newResults = newResults.filter(recipe => recipe.ustensils.includes(tagsSelected[i].firstChild.textContent))
+        }
+    } else {
+        let tagType = e.target
         if (tagType.classList.contains('ingredientTag')) newResults = newResults.concat(results.filter(recipe => ingredientsList(recipe, tagType.textContent)))
         if (tagType.classList.contains('applianceTag')) newResults = newResults.concat(results.filter(recipe => recipe.appliance.includes(tagType.textContent)))
         if (tagType.classList.contains('ustensileTag')) newResults = newResults.concat(results.filter(recipe => recipe.ustensils.includes(tagType.textContent)))
     }
 
-    cardsSection.innerHTML = ''
-
-    results = [];
-
     results = [...new Set(newResults)]
+
     if(e == undefined) {
 
-    } else     displayTagSelected(e)
+    } else     displayTagSelected(e) 
 
     displayRecipes(results)
     tagsAvailable(results)
@@ -219,3 +223,13 @@ function filterByTag(e) {
 
 
 tagsSelection()
+
+function initTags() {
+    selectedTags = document.querySelectorAll('.tag-selected')
+    for (let i = 0; i < selectedTags.length; i++) {
+        selectedTags[i].addEventListener('click', eraseTagSelected)
+    }
+}
+
+tagsAvailable(recipes)
+initTags()

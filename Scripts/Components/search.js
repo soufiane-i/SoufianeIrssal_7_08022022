@@ -12,50 +12,28 @@ function characterCheck()
 {
     if(searchBarInput.value.length >= 3) {
         searchBarFilter()
-    } else {
-
-    } 
+    } else filterByTag()
 }
 
 //Filter for search Bar : title, decription and ingredients
 function searchBarFilter()
 {
-    
     //Get search bar input value
     const userSearch = searchBarInput.value.toLowerCase()
     //Clear Cards Section
-    cardsSection.innerHTML = ''
-    let tagsSelected = document.querySelectorAll('.tag-selected')
-    let newResults = []
-    if (tagsSelected.length == 0) {
-        results = recipes.filter(
-            el => el.name.toLocaleLowerCase().includes(userSearch)
-        || el.description.toLocaleLowerCase().includes(userSearch)
-        || ingredientsList(el, searchBarInput.value)
-        )
+    
+    tagsSelected = document.querySelectorAll('.tag-selected')
+
+    if(tagsSelected.length > 0) {
+        filterByTag()
     } else {
-        if (results.length == 0) {
-            results = recipes.filter(
-                el => el.name.toLocaleLowerCase().includes(userSearch)
+        newResults = recipes.filter(
+            el => el.name.toLocaleLowerCase().includes(userSearch)
             || el.description.toLocaleLowerCase().includes(userSearch)
             || ingredientsList(el, searchBarInput.value)
-            )
-        } else {
-        newResults = results.filter(
-            el => el.name.toLocaleLowerCase().includes(userSearch)
-        || el.description.toLocaleLowerCase().includes(userSearch)
-        || ingredientsList(el, searchBarInput.value)
         )
+    
         results = newResults
-        }
-    }
-
-
-  
-    if (tagsSelected.length == 0) {
-    } else 
-    {
-        filterByTag()
     }
 
     if (results.length == 0) {
@@ -64,7 +42,6 @@ function searchBarFilter()
         noRecipeFoundMsg.classList.add('close')
         displayRecipes(results)
     }
-
     tagsAvailable(results)
 }
 
