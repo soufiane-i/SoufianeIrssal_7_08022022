@@ -32,6 +32,8 @@ function searchBarFilter()
             || el.description.toLocaleLowerCase().includes(userSearch)
             || ingredientsList(el, searchBarInput.value)
         )
+
+        newResults.sort((a, b) => (a.name > b.name) ? 1 : -1) 
     
         results = newResults
     }

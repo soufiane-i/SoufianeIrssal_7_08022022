@@ -178,6 +178,7 @@ function filterByTag(e) {
     }
 
     results = [...new Set(newResults)]
+    results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
 
     if(e == undefined) {
 
@@ -196,8 +197,6 @@ function initTags() {
         selectedTags[i].addEventListener('click', eraseTagSelected)
     }
 }
-
-
 
 tagsAvailable(recipes)
 initTags()
