@@ -35,6 +35,7 @@ function filtersOpen(e){
     }
     openFilter.classList.remove('close')
     filterCloseTarget.classList.add('close') 
+    filterByTag()
 }
 
 function filtersClose(e){
@@ -52,8 +53,6 @@ function eraseTagSelected(e) {
 }
 
 
-
-
 //Refresh tags available data
 function tagsAvailable(recipes) {
     filtredUstensils = []
@@ -64,11 +63,12 @@ function tagsAvailable(recipes) {
     filtredIngredients = []
     ingredientsArray = []
     ingredientsWitoutDuplicates = []
-
+    
     filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
     for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
     ingredientsWitoutDuplicates = [...new Set(ingredientsArray)]
     ingredientsWitoutDuplicates.sort()
+
 
     filtredAppliances = recipes.map(recipe => recipe.appliance)
     appliancesWitoutDuplicates = [...new Set(filtredAppliances)]
@@ -83,7 +83,7 @@ function tagsAvailable(recipes) {
 } 
 
 // Display tags availabe
-function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
+function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilsTags) {
 
     const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
     for (let i = 0; i < tagsChoiceContainer.length; i++) {
@@ -92,7 +92,7 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
 
     TagsSelectionDOM(ingredientsTags, 'ingredients')
     TagsSelectionDOM(appliancesTags, 'appliances')
-    TagsSelectionDOM(ustensilesTags, 'ustensils') 
+    TagsSelectionDOM(ustensilsTags, 'ustensils')  
 
     tagsSelection()
 }
@@ -101,7 +101,7 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
 function tagsSelection() {
     ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
     appliancesTagsSelection = document.querySelectorAll('.applianceTag')
-    ustensilsTagsSelection = document.querySelectorAll('.ustensileTag')
+    ustensilsTagsSelection = document.querySelectorAll('.ustensilTag')
 
     tagSelected = document.querySelectorAll('.tag-selected')
 
@@ -135,9 +135,9 @@ function displayTagSelected(e) {
     let tagContainer = e.target.parentNode
     newTag.classList.add('btn', 'tag-selected', 'me-2')
     newTag.innerHTML = `<span>${e.target.textContent}</span<i class="fa-regular fa-circle-xmark"></i>`
-    if (tagType.classList.contains('ustensileTag')) {
+    if (tagType.classList.contains('ustensilTag')) {
         newTag.style.backgroundColor = "#ED6454"
-        newTag.classList.add('ustensileTagSelected')
+        newTag.classList.add('ustensilTagSelected')
     } else if (tagType.classList.contains('ingredientTag')) {
         newTag.classList.add('ingredientTagSelected')
         newTag.style.backgroundColor = "#3282F7"
@@ -171,10 +171,10 @@ function filterByTag(e) {
     )
     if (e == undefined) {
         tagsSelected = document.querySelectorAll('.tag-selected')
-        for (let i = 0; i < tagsSelected.length; i++) { filterByTagType(newResults, tagsSelected[i], 'ingredientTagSelected', 'applianceTagSelected', 'ustensileTagSelected', tagsSelected[i].firstChild.textContent)}
+        for (let i = 0; i < tagsSelected.length; i++) { filterByTagType(newResults, tagsSelected[i], 'ingredientTagSelected', 'applianceTagSelected', 'ustensilTagSelected', tagsSelected[i].firstChild.textContent)}
     } else {
         let tagType = e.target
-        filterByTagType(results, tagType, 'ingredientTag', 'applianceTag', 'ustensileTag', tagType.textContent)
+        filterByTagType(results, tagType, 'ingredientTag', 'applianceTag', 'ustensilTag', tagType.textContent)
     }
 
     results = [...new Set(newResults)]
@@ -186,6 +186,7 @@ function filterByTag(e) {
 
     displayRecipes(results)
     tagsAvailable(results)
+    refreshTags()
 }
 
 
@@ -198,8 +199,9 @@ function initTags() {
     }
 }
 
-tagsAvailable(recipes)
+
 initTags()
+tagsAvailable(recipes)
 
 //Tags Creation in DOM
 function TagsSelectionDOM(tagCategorie, type) {
@@ -216,8 +218,8 @@ function TagsSelectionDOM(tagCategorie, type) {
             tagContainer = document.querySelector(`.appliancesTags`)
             tagTitle.classList.add(`applianceTag`) 
         } else if (type === 'ustensils') {
-            tagContainer = document.querySelector(`.ustensilesTags`)
-            tagTitle.classList.add(`ustensileTag`) 
+            tagContainer = document.querySelector(`.ustensilsTags`)
+            tagTitle.classList.add(`ustensilTag`) 
         }
         tagTitle.innerHTML = el 
         tagDiv.appendChild(tagTitle)
@@ -225,8 +227,8 @@ function TagsSelectionDOM(tagCategorie, type) {
     })
 }
 
-function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesClassTag, ustensilesClassTag, filterTag) {
+function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesClassTag, ustensilsClassTag, filterTag) {
 if (tagType.classList.contains(`${ingredientsClassTag}`)) newResults = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
 if (tagType.classList.contains(`${appliancesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.appliance.includes(filterTag))
-if (tagType.classList.contains(`${ustensilesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag))
+if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag))
 }
