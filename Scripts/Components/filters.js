@@ -68,13 +68,16 @@ function tagsAvailable(recipes) {
     filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
     for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
     ingredientsWitoutDuplicates = [...new Set(ingredientsArray)]
+    ingredientsWitoutDuplicates.sort()
 
     filtredAppliances = recipes.map(recipe => recipe.appliance)
     appliancesWitoutDuplicates = [...new Set(filtredAppliances)]
+    appliancesWitoutDuplicates.sort()
 
     filtredUstensils = recipes.map(recipe => recipe.ustensils)
     for (let i = 0; i < filtredUstensils.length; i++) ustensilsArray.push(...filtredUstensils[i])
     ustensilsWitoutDuplicates = [...new Set(ustensilsArray)]
+    ustensilsWitoutDuplicates.sort()
 
     DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustensilsWitoutDuplicates)
 } 
@@ -87,38 +90,9 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilesTags) {
         tagsChoiceContainer[i].innerHTML = ''
     }
 
-    ingredientsTags.forEach(el => {
-        let ingredientTag = document.createElement('div')
-        let ingredientTagTitle = document.createElement('span')
-        let tagContainer = document.querySelector('.ingredientsTags')
-        ingredientTag.classList.add('tag', 'col-4', 'mb-1')
-        ingredientTagTitle.classList.add('ingredientTag')
-        ingredientTagTitle.innerHTML = el 
-        ingredientTag.appendChild(ingredientTagTitle)
-        tagContainer.appendChild(ingredientTag)
-    })
-
-    appliancesTags.forEach(el => {
-        let appliancesTag = document.createElement('div')
-        let tagContainer = document.querySelector('.appliancesTags')
-        let applianceTagTitle = document.createElement('span')
-        appliancesTag.classList.add('tag', 'col-4', 'mb-1')
-        applianceTagTitle.classList.add('applianceTag')
-        applianceTagTitle.innerHTML = el 
-        appliancesTag.appendChild(applianceTagTitle)
-        tagContainer.appendChild(appliancesTag)
-    })
-
-    ustensilesTags.forEach(el => {
-        let ustensilesTag = document.createElement('div')
-        let ustensileTagTitle = document.createElement('span')
-        let tagContainer = document.querySelector('.ustensilesTags')
-        ustensilesTag.classList.add('tag', 'col-4', 'mb-1')
-        ustensileTagTitle.classList.add('ustensileTag')
-        ustensileTagTitle.innerHTML = el 
-        ustensilesTag.appendChild(ustensileTagTitle)
-        tagContainer.appendChild(ustensilesTag)
-    })   
+    TagsSelectionDOM(ingredientsTags, 'ingredients')
+    TagsSelectionDOM(appliancesTags, 'appliances')
+    TagsSelectionDOM(ustensilesTags, 'ustensils') 
 
     tagsSelection()
 }
@@ -231,5 +205,34 @@ function initTags() {
     }
 }
 
+
+
 tagsAvailable(recipes)
 initTags()
+
+//Tags Creation in DOM
+function TagsSelectionDOM(tagCategorie, type) {
+    tagCategorie.forEach(el => {
+        let tagDiv = document.createElement('div')
+        let tagTitle = document.createElement('span')
+        let tagContainer
+      
+        tagDiv.classList.add('tag', 'col-4', 'mb-1')
+        if (type === 'ingredients') {
+            console.log('iinkk');
+            tagContainer = document.querySelector(`.ingredientsTags`)
+            tagTitle.classList.add(`ingredientTag`) 
+        } else if (type === 'appliances') {
+            tagContainer = document.querySelector(`.appliancesTags`)
+            
+            tagTitle.classList.add(`applianceTag`) 
+        } else if (type === 'ustensils') {
+            tagContainer = document.querySelector(`.ustensilesTags`)
+            tagTitle.classList.add(`ustensileTag`) 
+        }
+        
+        tagTitle.innerHTML = el 
+        tagDiv.appendChild(tagTitle)
+        tagContainer.appendChild(tagDiv)
+    })
+}
