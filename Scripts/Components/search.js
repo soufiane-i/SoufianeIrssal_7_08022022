@@ -12,7 +12,7 @@ function characterCheck()
 {
     if(searchBarInput.value.length >= 3) {
         searchBarFilter()
-    } else filterByTag()
+    }
 }
 
 //Filter for search Bar : title, decription and ingredients
