@@ -27,7 +27,7 @@ function searchBarFilter()
     //Get search bar input value
     const userSearch = searchBarInput.value.toLowerCase()
     //Clear Cards Section
-    
+    cardsSection.innerHTML = ''
     tagsSelected = document.querySelectorAll('.tag-selected')
 
     if(tagsSelected.length > 0) {
@@ -36,7 +36,10 @@ function searchBarFilter()
         filterBySearchBar(userSearch)
     
         results = newResults
+        results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
     }
+
+    console.log(results.length);
 
     if (results.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
@@ -68,3 +71,10 @@ function refreshTags() {
     }
 }
 
+function filterBySearchBar(userSearch) {
+    newResults = recipes.filter(
+        el => el.name.toLocaleLowerCase().includes(userSearch)
+        || el.description.toLocaleLowerCase().includes(userSearch)
+        || ingredientsList(el, searchBarInput.value)
+    ) 
+}

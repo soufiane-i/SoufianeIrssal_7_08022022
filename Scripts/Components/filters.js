@@ -97,14 +97,7 @@ function tagsAvailable(recipes) {
     DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustensilsWitoutDuplicates)
 } 
 
-function filterBySearchBar(userSearch) {
-    newResults = recipes.filter(
-        el => el.name.toLocaleLowerCase().includes(userSearch)
-        || el.description.toLocaleLowerCase().includes(userSearch)
-        || ingredientsList(el, searchBarInput.value)
-    )
-    newResults.sort((a, b) => (a.name > b.name) ? 1 : -1) 
-}
+
 
 // Display tags availabe
 function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilsTags) {
