@@ -4,6 +4,8 @@ let newResults2 = []
 let tagsSelected = []
 let selectedTags
 
+recipes.sort((a, b) => (a.name > b.name) ? 1 : -1) 
+
 //Display Recipes with datas
 function displayRecipes(recipeArray) {
     //cards location
@@ -20,4 +22,4 @@ displayRecipes(recipes)
 for (let i = 0; i < tags.length; i++) tags[i].addEventListener('click', displayTagSelected)
 
 
-
+console.log(recipes);
