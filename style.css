@@ -26,7 +26,7 @@ h1 {
 .form-control {
     background-color: #E7E7E7;
     font-size: 18px;
-    height: 70px;
+    height: 60px;
 }
 
 .form-control::placeholder {
@@ -89,10 +89,11 @@ h1 {
     margin-right: 20px;
 }
 
-#tags-ingredient input  {
+#tags-ingredients input, .ingredientsTags  {
     background-color: #3282F7;
     color: white;
 }
+
 
 #tags-appareils input {
     background-color: #68D9A4;
@@ -103,11 +104,11 @@ h1 {
     color: white;
 }
 
-#tags-ustenciles input {
+#tags-ustensils input {
     background-color: #ED6454;
 }
 
-#btn-ustenciles-open .tagChoiceContainer  {
+#btn-ustensils-open .tagChoiceContainer  {
     background-color: #ED6454;
     color: white;
 }
@@ -126,7 +127,7 @@ h1 {
 
 .tagInputContainer i {
     position: absolute;
-    top: 30px;
+    top: 25px;
     right: 20px;
 }
 
@@ -188,6 +189,10 @@ h1 {
     pointer-events: none;
 }
 
+.chevron-up {
+    transform: ;
+}
+
 .close {
     display: none;
 }
@@ -230,18 +235,28 @@ h2 {
 }
 
 .tagChoiceContainer {
-    background-color: #3282F7;
     transform: translateX(12px) translateY(-5px);
     width: 545px;
+    position: relative;
+    z-index: 1;
 }
 
-.tagBtn {
+.tag {
     text-align: left;
     font-size: 12px;
     color: white;
 }
 
-#tag-ingredient {
-    background-color: #68D9A4;
+.tag span {
+    text-align: left;
+    font-size: 12px;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+.filter-open {
+    height: 50px;
 }
 
