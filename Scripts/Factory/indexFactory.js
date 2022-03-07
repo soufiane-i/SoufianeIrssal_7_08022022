@@ -15,7 +15,7 @@ function cardCreation(recipe) {
 
     cardContainer1.classList.add('col-4', 'my-4', 'px-4')
     cardContainer2.classList.add('card', 'w-100')
-    cardImg.setAttribute('src', './Assets/img-placeholder.png')
+    cardImg.setAttribute('src', `./Assets/recipes/${recipe.name.toLowerCase()}.jpg`)
     cardBody.classList.add('card-body')
     cardBodyHead.classList.add('row', 'cardHead')
     cardBodyContent.classList.add('row', 'cardContent')

@@ -222,7 +222,7 @@ const recipes = [
         "ustensils": ["moule à tarte", "saladier", "fourchette"]
     },{
         "id": 7,
-        "name": "Tartelettes au chocolat et aux fraises",
+        "name": "Tartelette au chocolat et aux fraises",
         "servings": 6,
         "ingredients":[
             {
@@ -1423,7 +1423,7 @@ const recipes = [
     }, 
     {
         "id": 42,
-        "name": "Charlotte au poires",
+        "name": "Charlotte aux poires",
         "servings": 3,
         "ingredients": [
             {
