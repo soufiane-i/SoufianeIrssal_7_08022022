@@ -86,7 +86,6 @@ function filterBySearchBar(userSearch) {
            if (recipes[i].description.substring(j2,j2 + userSearch.length).toLocaleLowerCase() === userSearch) {
                newResultsWithDuplicate.push(recipes[i])
            }
-           
        } 
        for (let j3 = 0; j3 < recipes[i].ingredients.length; j3++) {
            for (let k = 0; k < recipes[i].ingredients[j3].ingredient.length; k++) {
