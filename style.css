@@ -260,3 +260,7 @@ h2 {
     height: 50px;
 }
 
+.imgRecipe {
+    object-fit: cover;
+    height: 170px;
+}

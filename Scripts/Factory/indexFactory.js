@@ -25,6 +25,7 @@ function cardCreation(recipe) {
     cardIngredients.classList.add('col-6')
     cardDescription.classList.add('col-6', 'cardDescription')
     cardListGroup.classList.add('list-group')
+    cardImg.classList.add('imgRecipe')
 
     cardTitle.innerHTML = recipe.name
     cardTimeContainer.innerHTML = `<i class="fa-regular fa-clock fa-lg me-2"></i>
