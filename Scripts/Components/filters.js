@@ -34,7 +34,8 @@ let ingredientsArray = []
 let ingredientsWitoutDuplicates = []
 
 for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
-for (let i = 0; i < filtersInputContainer.length; i++) openFiltersChevronUp[i].addEventListener('click', filtersClose)
+//for (let i = 0; i < openFiltersChevronUp.length; i++) openFiltersChevronUp[i].addEventListener('click', filtersClose)
+window.addEventListener('click', filtersClose)
 
 function filtersOpen(e){
     let filterCloseTarget = e.target
@@ -51,13 +52,17 @@ function filtersOpen(e){
 }
 
 function filtersClose(e){
-    let filterCloseTarget = e.target.parentNode.parentNode
-    filterCloseTarget.classList.add('close')
-    let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
-    closeFilter.classList.remove('close')
-    ingredientInput.value =  ''
-    applianceInput.value = ''
-    ustensilInput.value = ''
+/*     let filterCloseTarget = e.target.parentNode.parentNode
+    console.log(filterCloseTarget);
+    if (filterCloseTarget.classList.contains('filter-open')) {
+        filterCloseTarget.classList.add('close')
+        let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
+        closeFilter.classList.remove('close')
+        ingredientInput.value =  ''
+        applianceInput.value = ''
+        ustensilInput.value = ''    
+    } */
+
 }
 
 function eraseTagSelected(e) {
