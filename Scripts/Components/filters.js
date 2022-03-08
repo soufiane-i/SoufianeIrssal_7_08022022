@@ -52,17 +52,26 @@ function filtersOpen(e){
 }
 
 function filtersClose(e){
-/*     let filterCloseTarget = e.target.parentNode.parentNode
-    console.log(filterCloseTarget);
-    if (filterCloseTarget.classList.contains('filter-open')) {
-        filterCloseTarget.classList.add('close')
-        let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
-        closeFilter.classList.remove('close')
+    let filterCloseTarget = e.target.parentNode.parentNode    
+    let target = e.target
+  
+    
+    if (target.classList.contains('inputTag') || target.classList.contains('tagChoiceContainer') || target.classList.contains('tag') || target.classList.contains('filter-close')) {
+        
+    } else { 
+        
+        console.log(openFilters);
+        for (let i = 0; i < openFilters.length; i++) {
+        openFilters[i].classList.add('close')
+        closeFilters[i].classList.remove('close')
+
+            
+        }
+        
         ingredientInput.value =  ''
         applianceInput.value = ''
-        ustensilInput.value = ''    
-    } */
-
+        ustensilInput.value = ''   
+    }
 }
 
 function eraseTagSelected(e) {
