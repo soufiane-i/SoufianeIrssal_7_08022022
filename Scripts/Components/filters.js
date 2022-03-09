@@ -59,18 +59,14 @@ function filtersClose(e){
     if (target.classList.contains('inputTag') || target.classList.contains('tagChoiceContainer') || target.classList.contains('tag') || target.classList.contains('filter-close')) {
         
     } else { 
-        
-        console.log(openFilters);
         for (let i = 0; i < openFilters.length; i++) {
         openFilters[i].classList.add('close')
-        closeFilters[i].classList.remove('close')
-
-            
+        closeFilters[i].classList.remove('close') 
         }
         
-        ingredientInput.value =  ''
+        ingredientInput.value = ''
         applianceInput.value = ''
-        ustensilInput.value = ''   
+        ustensilInput.value = ''  
     }
 }
 
@@ -222,6 +218,7 @@ function TagsSelectionDOM(tagCategorie, type) {
             tagContainer = document.querySelector(`.ustensilsTags`)
             tagTitle.classList.add(`ustensilTag`) 
         }
+        el = el.charAt(0).toUpperCase() + el.slice(1)
         tagTitle.innerHTML = el 
         tagDiv.appendChild(tagTitle)
         tagContainer.appendChild(tagDiv)
@@ -231,7 +228,8 @@ function TagsSelectionDOM(tagCategorie, type) {
 function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesClassTag, ustensilsClassTag, filterTag) {
 if (tagType.classList.contains(`${ingredientsClassTag}`)) newResults = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
 if (tagType.classList.contains(`${appliancesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
-if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag) && recipe.ustensils.length == filterTag.length)
+if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
+console.log(newResults)
 }
 
 function tagBarFilter(e)

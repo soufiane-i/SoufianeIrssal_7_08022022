@@ -57,8 +57,6 @@ function ingredientsList(recipe, tag)
     return false
 }
 
-
-
 function refreshTags() {
     if (results.length == 0) {
         ingredientsTags = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
