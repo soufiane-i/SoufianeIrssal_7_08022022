@@ -89,5 +89,5 @@ function filterBySearchBar(userSearch) {
 }
 
    newResults = [...new Set(newResultsWithDuplicate)]
-   console.log(newResults)
+  
 }

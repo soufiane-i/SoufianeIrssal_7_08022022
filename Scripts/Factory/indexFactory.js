@@ -14,7 +14,7 @@ function cardCreation(recipe) {
     let cardListGroup = document.createElement('ul')
 
     cardContainer1.classList.add('col-4', 'my-4')
-    cardContainer2.classList.add('card', 'w-100')
+    cardContainer2.classList.add('card')
     cardImg.setAttribute('src', `./Assets/recipes/${recipe.name.toLowerCase()}.jpg`)
     cardBody.classList.add('card-body')
     cardBodyHead.classList.add('row', 'cardHead')

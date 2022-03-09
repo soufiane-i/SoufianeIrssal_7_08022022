@@ -11,14 +11,14 @@
     <title>Document</title>
 </head>
 <body>
-    <header class="d-flex flex-column align-items-center mt-4 mb-2">
+    <header class="d-flex flex-column align-items-center mt-3 mb-2">
         <img src="./Assets/logo.svg" alt="logo">
-        <h1 class="h1">Les petits plats</h1>
+        <h1>Les petits plats</h1>
     </header>
     <main>
         <article class="container-fluid input-group input-group-lg mb-3">
             <input id="searchBarInput" type="text" class="form-control border-0" placeholder="Rechercher une recette" aria-label="Rechercher une recette" aria-describedby="button-addon2">
-            <button class="btn btn-outline-secondary border-0" type="button" id="button-search"><i class="fas fa-search fa-lg"></i></button>
+            <button class="btn btn-outline-secondary border-0" type="button" id="button-search"><i class="fas fa-search"></i></button>
         </article>
         <section id="tags" class="container-fluid">
         </section>
@@ -43,8 +43,8 @@
             </div> 
         </section>
         </article>
-        <div class="container-fluid py-1" id="cardsContainer">
-            <div class="row" id="cardsSection">
+        <div class="container-fluid" id="cardsContainer">
+            <div class="row" id="cardsSection" class="container-fluid">
 
             </div>
             <section class="noRecipeFound mt-5 ms-3 close">

@@ -161,6 +161,7 @@ function displayTagSelected(e) {
 
 
 function filterByTag(e) {
+    console.log(e);
     const userSearch = searchBarInput.value.toLowerCase()
     tagsSelected = document.querySelectorAll('.tag-selected')
     
@@ -229,7 +230,7 @@ function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesC
 if (tagType.classList.contains(`${ingredientsClassTag}`)) newResults = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
 if (tagType.classList.contains(`${appliancesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
 if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
-console.log(newResults)
+
 }
 
 function tagBarFilter(e)
