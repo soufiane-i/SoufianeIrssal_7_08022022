@@ -71,6 +71,10 @@ h1 {
     margin-bottom: 15px;
 }
 
+.tag-selected span {
+    pointer-events: none;
+}
+
 .tag-input {
    height: 50px;
    font-size: 14px;
@@ -247,6 +251,7 @@ h2 {
     position: relative;
     z-index: 1;
     padding: 10px;
+    pointer-events: none;
 }
 
 .tag {

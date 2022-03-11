@@ -18,6 +18,7 @@ function characterCheck()
         searchBarFilter()
     } else {
         if (tagsSelected.length > 0) filterByTag()
+        else displayRecipes(recipes)
     }
 }
 
@@ -38,8 +39,6 @@ function searchBarFilter()
         results = newResults
         results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
     }
-
-    console.log(results.length);
 
     if (results.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
@@ -75,10 +74,10 @@ function filterBySearchBar(userSearch) {
    newResults = []
 
    for (let i = 0; i < recipes.length; i++) {
-    if (recipes[i].name.toLocaleLowerCase().includes(userSearch)) {
+    if (recipes[i].name.toLowerCase().includes(userSearch)) {
         newResultsWithDuplicate.push(recipes[i])
     }
-    if (recipes[i].description.toLocaleLowerCase().includes(userSearch)) {
+    if (recipes[i].description.toLowerCase().includes(userSearch)) {
         newResultsWithDuplicate.push(recipes[i])
     }
     if (recipes[i].ingredients.find(object => object.ingredient.includes(userSearch))) {
