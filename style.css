@@ -142,10 +142,6 @@ h1 {
     right: 20px;
 }
 
-.fa-circle-xmark {
-    margin-left: 5px;
-}
-
 #filters {
     display: flex;
     flex-direction: row;
@@ -199,6 +195,11 @@ h1 {
     height: 20px;
     margin-left: 25px;
     pointer-events: none;
+}
+
+.fa-circle-xmark {
+    margin-left: 5px;
+    height: 15px;
 }
 
 .close {
