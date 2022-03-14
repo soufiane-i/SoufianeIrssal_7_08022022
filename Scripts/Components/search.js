@@ -79,12 +79,13 @@ function filterBySearchBar(userSearch) {
     }
     if (recipes[i].description.toLowerCase().includes(userSearch)) {
         newResultsWithDuplicate.push(recipes[i])
-    }
-    if (recipes[i].ingredients.find(object => object.ingredient.includes(userSearch))) {
+    } 
+    if (recipes[i].ingredients.find(object => object.ingredient.toLowerCase().includes(userSearch))) {
         newResultsWithDuplicate.push(recipes[i])
     }   
 }
 
    newResults = [...new Set(newResultsWithDuplicate)]
+   console.log(newResults);
   
 }
