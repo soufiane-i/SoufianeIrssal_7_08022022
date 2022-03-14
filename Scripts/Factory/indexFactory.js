@@ -13,18 +13,20 @@ function cardCreation(recipe) {
     let cardDescription = document.createElement('div')
     let cardListGroup = document.createElement('ul')
 
-    cardContainer1.classList.add('col-4', 'my-4', 'px-4')
-    cardContainer2.classList.add('card', 'w-100')
-    cardImg.setAttribute('src', './Assets/img-placeholder.png')
+    cardContainer1.classList.add('col-4', 'my-4')
+    cardContainer2.classList.add('card')
+    console.log(recipe.name.toLowerCase());
+    cardImg.setAttribute('src', `../Assets/recipes/${recipe.name.toLowerCase()}.jpg`)
     cardBody.classList.add('card-body')
     cardBodyHead.classList.add('row', 'cardHead')
     cardBodyContent.classList.add('row', 'cardContent')
     cardTitleContainer.classList.add('col-8')
-    cardTimeContainer.classList.add('col-3', 'd-flex', 'align-items-center', 'justify-content-end', 'pe-0',  'time-section')
+    cardTimeContainer.classList.add('col-4', 'd-flex', 'align-items-center', 'justify-content-center', 'pe-0',  'time-section')
     cardBodyContent.classList.add('row')
     cardIngredients.classList.add('col-6')
     cardDescription.classList.add('col-6', 'cardDescription')
     cardListGroup.classList.add('list-group')
+    cardImg.classList.add('imgRecipe')
 
     cardTitle.innerHTML = recipe.name
     cardTimeContainer.innerHTML = `<i class="fa-regular fa-clock fa-lg me-2"></i>

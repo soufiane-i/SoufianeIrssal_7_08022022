@@ -4,6 +4,7 @@ let newResults2 = []
 let tagsSelected = []
 let selectedTags
 
+
 recipes.sort((a, b) => (a.name > b.name) ? 1 : -1) 
 
 //Display Recipes with datas
@@ -20,6 +21,9 @@ displayRecipes(recipes)
 
 //DisplayTags
 for (let i = 0; i < tags.length; i++) tags[i].addEventListener('click', displayTagSelected)
+
+
+
 
 
 

@@ -18,6 +18,7 @@ function characterCheck()
         searchBarFilter()
     } else {
         if (tagsSelected.length > 0) filterByTag()
+        else displayRecipes(recipes)
     }
 }
 
@@ -39,8 +40,6 @@ function searchBarFilter()
         results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
     }
 
-    console.log(results.length);
-
     if (results.length == 0) {
         noRecipeFoundMsg.classList.remove('close')
     } else {
@@ -57,8 +56,6 @@ function ingredientsList(recipe, tag)
     return false
 }
 
-
-
 function refreshTags() {
     if (results.length == 0) {
         ingredientsTags = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
@@ -72,9 +69,10 @@ function refreshTags() {
 }
 
 function filterBySearchBar(userSearch) {
+    newResults = []
     newResults = recipes.filter(
-        el => el.name.toLocaleLowerCase().includes(userSearch)
-        || el.description.toLocaleLowerCase().includes(userSearch)
-        || ingredientsList(el, searchBarInput.value)
+        el => el.name.toLowerCase().includes(userSearch)
+        || el.description.toLowerCase().includes(userSearch)
+        || ingredientsList(el, userSearch)
     ) 
 }

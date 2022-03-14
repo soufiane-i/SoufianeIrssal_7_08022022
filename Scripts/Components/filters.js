@@ -34,7 +34,7 @@ let ingredientsArray = []
 let ingredientsWitoutDuplicates = []
 
 for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
-for (let i = 0; i < filtersInputContainer.length; i++) openFiltersChevronUp[i].addEventListener('click', filtersClose)
+window.addEventListener('click', filtersClose)
 
 function filtersOpen(e){
     let filterCloseTarget = e.target
@@ -51,17 +51,25 @@ function filtersOpen(e){
 }
 
 function filtersClose(e){
-    let filterCloseTarget = e.target.parentNode.parentNode
-    filterCloseTarget.classList.add('close')
-    let closeFilter = document.querySelector(`#${filterCloseTarget.getAttribute('name')}-close`)
-    closeFilter.classList.remove('close')
-    ingredientInput.value =  ''
-    applianceInput.value = ''
-    ustensilInput.value = ''
+    let target = e.target
+  
+    
+    if (target.classList.contains('inputTag') || target.classList.contains('tagChoiceContainer') || target.classList.contains('tag') || target.classList.contains('filter-close')) {
+        
+    } else { 
+        for (let i = 0; i < openFilters.length; i++) {
+        openFilters[i].classList.add('close')
+        closeFilters[i].classList.remove('close') 
+        }
+        
+        ingredientInput.value = ''
+        applianceInput.value = ''
+        ustensilInput.value = ''  
+    }
 }
 
 function eraseTagSelected(e) {
-    e.target.parentNode.remove()
+    e.target.remove()
     filterByTag()
     tagsSelection()
     tagsAvailable(results)
@@ -126,11 +134,11 @@ function tagsSelection() {
 } 
 
 function displayTagSelected(e) {
-    let newTag = document.createElement('div')
     let tagType = e.target
     let tagContainer = e.target.parentNode
+    let newTag = document.createElement('div')
     newTag.classList.add('btn', 'tag-selected', 'me-2')
-    newTag.innerHTML = `<span>${e.target.textContent}</span<i class="fa-regular fa-circle-xmark"></i>`
+    newTag.innerHTML = `<span>${e.target.textContent}</span><i class="fa-regular fa-circle-xmark"></i>`
     if (tagType.classList.contains('ustensilTag')) {
         newTag.style.backgroundColor = "#ED6454"
         newTag.classList.add('ustensilTagSelected')
@@ -151,6 +159,7 @@ function displayTagSelected(e) {
 
 
 function filterByTag(e) {
+  
     const userSearch = searchBarInput.value.toLowerCase()
     tagsSelected = document.querySelectorAll('.tag-selected')
     
@@ -208,6 +217,7 @@ function TagsSelectionDOM(tagCategorie, type) {
             tagContainer = document.querySelector(`.ustensilsTags`)
             tagTitle.classList.add(`ustensilTag`) 
         }
+        el = el.charAt(0).toUpperCase() + el.slice(1)
         tagTitle.innerHTML = el 
         tagDiv.appendChild(tagTitle)
         tagContainer.appendChild(tagDiv)
@@ -217,7 +227,8 @@ function TagsSelectionDOM(tagCategorie, type) {
 function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesClassTag, ustensilsClassTag, filterTag) {
 if (tagType.classList.contains(`${ingredientsClassTag}`)) newResults = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
 if (tagType.classList.contains(`${appliancesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
-if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag) && recipe.ustensils.length == filterTag.length)
+if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
+
 }
 
 function tagBarFilter(e)
@@ -261,18 +272,19 @@ function tagBarFilter(e)
     
     ustensilsTagsWDuplicates = [...new Set(ustensilsArray)]
     ustensilsTagsWDuplicates.sort()
-
+    console.log(e.target.id)
+    console.log(ingredientInput.id);
     if (e.target.id === ingredientInput.id) {
         userSearch = ingredientInput.value.toLowerCase()
-        ingredientsTagsWDuplicates = ingredientsTagsWDuplicates.filter(el => el.toLocaleLowerCase().includes(userSearch)) 
+        ingredientsTagsWDuplicates = ingredientsTagsWDuplicates.filter(el => el.toLowerCase().includes(userSearch)) 
 
     } else if (e.target.id === applianceInput.id) {
         userSearch = applianceInput.value.toLowerCase()
-        appliancesTagsWDuplicates = appliancesTagsWDuplicates.filter(el => el.toLocaleLowerCase().includes(userSearch)) 
+        appliancesTagsWDuplicates = appliancesTagsWDuplicates.filter(el => el.toLowerCase().includes(userSearch)) 
 
     } else if (e.target.id === ustensilInput.id) {
         userSearch = ustensilInput.value.toLowerCase()
-        ustensilsTagsWDuplicates = ustensilsTagsWDuplicates.filter(el => el.toLocaleLowerCase().includes(userSearch)) 
+        ustensilsTagsWDuplicates = ustensilsTagsWDuplicates.filter(el => el.toLowerCase().includes(userSearch)) 
     } 
     
     DisplayTagsAvailable(ingredientsTagsWDuplicates, appliancesTagsWDuplicates, ustensilsTagsWDuplicates)
