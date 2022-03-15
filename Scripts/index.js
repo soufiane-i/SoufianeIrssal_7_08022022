@@ -1,4 +1,5 @@
 //recipes = all the recipe array
+let newResults = []
 //Display Recipes with datas
 function displayRecipes(recipeArray) {
     //cards location
