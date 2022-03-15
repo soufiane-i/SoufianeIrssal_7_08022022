@@ -1,40 +1,48 @@
-//Filter DOM
+//Variables----------------------------------------------------------------------------------------
 let closeFilters = document.querySelectorAll('.filter-close')
 let openFilters = document.querySelectorAll('.filter-open') 
 let filtersInputContainer = document.querySelectorAll('.tagInputContainer') 
 let openFiltersChevronUp = document.querySelectorAll('.fa-chevron-up')
 
 let tagsContainer = document.querySelector('#tags')
-let tags = document.querySelectorAll('.tagBtn')
+let availableTags = document.querySelectorAll('.tagBtn')
 
 let ingredientInput = document.getElementById('ingredientInput')
 let applianceInput = document.getElementById('applianceInput')
 let ustensilInput = document.getElementById('ustensilInput')
 
-ingredientInput.addEventListener('input', tagBarFilter)
-applianceInput.addEventListener('input', tagBarFilter)
-ustensilInput.addEventListener('input', tagBarFilter)
-
-ingredientInput.value =  ''
-applianceInput.value = ''
-ustensilInput.value = ''
-
 //Tags Available actualisation
-
-let ingredientsTagsSelection
-let appliancesTagsSelection
-let ustensilsTagsSelection
 let filtredUstensils = []
-let ustensilsArray = []
-let ustensilsWitoutDuplicates = []
 let filtredAppliances = []
-let appliancesWitoutDuplicates = []
 let filtredIngredients = []
-let ingredientsArray = []
-let ingredientsWitoutDuplicates = []
 
-for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
-window.addEventListener('click', filtersClose)
+let tagsSelected = []
+let selectedTags
+
+//--------------------------------------------------------------------------------------------------
+
+function filterInit() {
+    for (let i = 0; i < availableTags.length; i++) availableTags[i].addEventListener('click', displayTagSelected)
+    for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
+    for (let i = 0; i < selectedTags.length; i++) selectedTags[i].addEventListener('click', eraseTagSelected)
+
+    window.addEventListener('click', filtersClose)
+    ingredientInput.addEventListener('input', tagBarFilter)
+    applianceInput.addEventListener('input', tagBarFilter)
+    ustensilInput.addEventListener('input', tagBarFilter)
+
+    ingredientInput.value =  ''
+    applianceInput.value = ''
+    ustensilInput.value = ''
+
+    selectedTags = document.querySelectorAll('.tag-selected')
+
+    refreshTags()
+    tagsSelection()
+    tagsAvailable(recipes)
+}
+
+filterInit()
 
 function filtersOpen(e){
     let filterCloseTarget = e.target
@@ -53,7 +61,6 @@ function filtersOpen(e){
 function filtersClose(e){
     let target = e.target
   
-    
     if (target.classList.contains('inputTag') || target.classList.contains('tagChoiceContainer') || target.classList.contains('tag') || target.classList.contains('filter-close')) {
         
     } else { 
@@ -75,23 +82,21 @@ function eraseTagSelected(e) {
     tagsAvailable(results)
 }
 
-
 //Refresh tags available data
 function tagsAvailable(recipes) {
     filtredUstensils = []
-    ustensilsArray = []
-    ustensilsWitoutDuplicates = []
+    let ustensilsArray = []
+    let ustensilsWitoutDuplicates = []
     filtredAppliances = []
-    appliancesWitoutDuplicates = []
+    let appliancesWitoutDuplicates = []
     filtredIngredients = []
-    ingredientsArray = []
-    ingredientsWitoutDuplicates = []
+    let ingredientsArray = []
+    let ingredientsWitoutDuplicates = []
     
     filtredIngredients = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
     for (let i = 0; i < filtredIngredients.length; i++) ingredientsArray.push(...filtredIngredients[i])
     ingredientsWitoutDuplicates = [...new Set(ingredientsArray)]
     ingredientsWitoutDuplicates.sort()
-
 
     filtredAppliances = recipes.map(recipe => recipe.appliance)
     appliancesWitoutDuplicates = [...new Set(filtredAppliances)]
@@ -105,15 +110,10 @@ function tagsAvailable(recipes) {
     DisplayTagsAvailable(ingredientsWitoutDuplicates, appliancesWitoutDuplicates, ustensilsWitoutDuplicates)
 } 
 
-
-
 // Display tags availabe
 function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilsTags) {
-
     const tagsChoiceContainer = document.querySelectorAll('.tagChoiceContainer')
-    for (let i = 0; i < tagsChoiceContainer.length; i++) {
-        tagsChoiceContainer[i].innerHTML = ''
-    }
+    for (let i = 0; i < tagsChoiceContainer.length; i++) tagsChoiceContainer[i].innerHTML = ''
 
     TagsSelectionDOM(ingredientsTags, 'ingredients')
     TagsSelectionDOM(appliancesTags, 'appliances')
@@ -124,15 +124,16 @@ function DisplayTagsAvailable(ingredientsTags, appliancesTags, ustensilsTags) {
 
 // refresh Tags selection make its clickable 
 function tagsSelection() {
-    ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
-    appliancesTagsSelection = document.querySelectorAll('.applianceTag')
-    ustensilsTagsSelection = document.querySelectorAll('.ustensilTag')
+    let ingredientsTagsSelection = document.querySelectorAll('.ingredientTag')
+    let appliancesTagsSelection = document.querySelectorAll('.applianceTag')
+    let ustensilsTagsSelection = document.querySelectorAll('.ustensilTag')
 
     TagSelectAfterClick(ingredientsTagsSelection)
     TagSelectAfterClick(appliancesTagsSelection)
     TagSelectAfterClick(ustensilsTagsSelection)
 } 
 
+//Display tag selected taking into account its type(ingredient, ustensil, appliance)
 function displayTagSelected(e) {
     let tagType = e.target
     let tagContainer = e.target.parentNode
@@ -151,31 +152,28 @@ function displayTagSelected(e) {
     }
     tagsContainer.appendChild(newTag)
     selectedTags = document.querySelectorAll('.tag-selected')
-    for (let i = 0; i < selectedTags.length; i++) {
-        selectedTags[i].addEventListener('click', eraseTagSelected)
-    }
+    for (let i = 0; i < selectedTags.length; i++) selectedTags[i].addEventListener('click', eraseTagSelected)
     tagContainer.remove()
 }
 
-
+// Filtation by tag. Use alone or with the search bar search. Two diffents way. Alone with e.target
 function filterByTag(e) {
-  
     const userSearch = searchBarInput.value.toLowerCase()
     tagsSelected = document.querySelectorAll('.tag-selected')
     
-    newResults = []
+    results = []
     
     if (results.length == 0) results = recipes
     if(searchBarInput.value.length >= 3) filterBySearchBar(userSearch)
-    else newResults = recipes
+    else results = recipes
 
-    if (e == undefined) for (let i = 0; i < tagsSelected.length; i++) filterByTagType(newResults, tagsSelected[i], 'ingredientTagSelected', 'applianceTagSelected', 'ustensilTagSelected', tagsSelected[i].firstChild.textContent)
+    if (e == undefined) for (let i = 0; i < tagsSelected.length; i++) filterByTagType(results, tagsSelected[i], 'ingredientTagSelected', 'applianceTagSelected', 'ustensilTagSelected', tagsSelected[i].firstChild.textContent)
     else {
         let tagType = e.target
         filterByTagType(results, tagType, 'ingredientTag', 'applianceTag', 'ustensilTag', tagType.textContent)
     }
 
-    results = [...new Set(newResults)]
+    results = [...new Set(results)]
     results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
 
     if(!(e == undefined)) displayTagSelected(e)
@@ -184,20 +182,6 @@ function filterByTag(e) {
     tagsAvailable(results)
     refreshTags()
 }
-
-
-tagsSelection()
-
-function initTags() {
-    selectedTags = document.querySelectorAll('.tag-selected')
-    for (let i = 0; i < selectedTags.length; i++) {
-        selectedTags[i].addEventListener('click', eraseTagSelected)
-    }
-}
-
-
-initTags()
-tagsAvailable(recipes)
 
 //Tags Creation in DOM
 function TagsSelectionDOM(tagCategorie, type) {
@@ -225,16 +209,15 @@ function TagsSelectionDOM(tagCategorie, type) {
 }
 
 function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesClassTag, ustensilsClassTag, filterTag) {
-if (tagType.classList.contains(`${ingredientsClassTag}`)) newResults = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
-if (tagType.classList.contains(`${appliancesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
-if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
-
+if (tagType.classList.contains(`${ingredientsClassTag}`)) results = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
+if (tagType.classList.contains(`${appliancesClassTag}`)) results = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
+if (tagType.classList.contains(`${ustensilsClassTag}`)) results = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
 }
 
+//searchbar for tags
 function tagBarFilter(e)
 {
     let userSearch
-
     let ingredientsTags = []
     let ingredientsArray = []
     let appliancesTags = []
@@ -244,17 +227,8 @@ function tagBarFilter(e)
     let ingredientsTagsWDuplicates = []
     let appliancesTagsWDuplicates = []
 
-    refreshTags()
-
-    if (results.length == 0) {
-        ingredientsTags = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
-        appliancesTags = recipes.map(recipe => recipe.appliance)
-        ustensilsTags = recipes.map(recipe => recipe.ustensils)
-    } else {
-        ingredientsTags = results.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
-        appliancesTags = results.map(recipe => recipe.appliance)
-        ustensilsTags = results.map(recipe => recipe.ustensils)
-    }
+    if (results.length == 0) newTagArray(recipes)
+    else newTagArray(results)
 
     for (let i = 0; i < ingredientsTags.length; i++) ingredientsArray.push(...filtredIngredients[i])
     for (let i = 0; i < filtredUstensils.length; i++) ustensilsArray.push(...filtredUstensils[i])
@@ -262,7 +236,6 @@ function tagBarFilter(e)
 
     ingredientsTagsWDuplicates = [...new Set(ingredientsArray)]
     ingredientsTagsWDuplicates.sort()
-
 
     appliancesTags = recipes.map(recipe => recipe.appliance)
     appliancesTagsWDuplicates = [...new Set(appliancesTags)]
@@ -272,8 +245,7 @@ function tagBarFilter(e)
     
     ustensilsTagsWDuplicates = [...new Set(ustensilsArray)]
     ustensilsTagsWDuplicates.sort()
-    console.log(e.target.id)
-    console.log(ingredientInput.id);
+
     if (e.target.id === ingredientInput.id) {
         userSearch = ingredientInput.value.toLowerCase()
         ingredientsTagsWDuplicates = ingredientsTagsWDuplicates.filter(el => el.toLowerCase().includes(userSearch)) 
@@ -288,18 +260,15 @@ function tagBarFilter(e)
     } 
     
     DisplayTagsAvailable(ingredientsTagsWDuplicates, appliancesTagsWDuplicates, ustensilsTagsWDuplicates)
-
     tagsSelection()
-
- 
 }
 
+//refresh eventlistener after tag selection
 function TagSelectAfterClick(tagTypeArray) {
     tagSelected = document.querySelectorAll('.tag-selected')
 
     for (let i = 0; i < tagTypeArray.length; i++) {
         tagTypeArray[i].addEventListener('click', filterByTag)
-
         if (tagSelected.length > 0){
             for (let j = 0; j < tagSelected.length; j++) {
                 if(tagTypeArray[i].textContent == tagSelected[j].firstChild.textContent) {
@@ -308,4 +277,18 @@ function TagSelectAfterClick(tagTypeArray) {
             }
         }
     }
+}
+
+function refreshTags() {
+    if (results.length == 0) {
+        newTagArray(recipes)
+    } else {
+    newTagArray(results)
+    }
+}
+
+function newTagArray(recipes) {
+    ingredientsTags = recipes.map(recipe => recipe.ingredients.map(ingredient => ingredient.ingredient))
+    appliancesTags = recipes.map(recipe => recipe.appliance)
+    ustensilsTags = recipes.map(recipe => recipe.ustensils)
 }
