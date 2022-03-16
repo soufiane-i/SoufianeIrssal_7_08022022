@@ -71,8 +71,13 @@ function filtersOpen(e){
 function filtersClose(e){
     let target = e.target
   
-    if (target.classList.contains('inputTag') || target.classList.contains('tagChoiceContainer') || target.classList.contains('tag') || target.classList.contains('filter-close')) {
-        
+    if (target.classList.contains('inputTag') 
+    || target.classList.contains('tagChoiceContainer') 
+    || target.classList.contains('tag') 
+    || target.classList.contains('filter-close')
+    || target.classList.contains('ingredientTag')
+    || target.classList.contains('ustensilTag')
+    || target.classList.contains('applianceTag')) {        
     } else { 
         for (let i = 0; i < openFilters.length; i++) {
         openFilters[i].classList.add('close')
