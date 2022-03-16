@@ -22,6 +22,7 @@ let selectedTags
 //--------------------------------------------------------------------------------------------------
 
 function filterInit() {
+    selectedTags = document.querySelectorAll('.tag-selected')
     for (let i = 0; i < availableTags.length; i++) availableTags[i].addEventListener('click', displayTagSelected)
     for (let i = 0; i < closeFilters.length; i++) closeFilters[i].addEventListener('click', filtersOpen)
     for (let i = 0; i < selectedTags.length; i++) selectedTags[i].addEventListener('click', eraseTagSelected)
@@ -35,7 +36,7 @@ function filterInit() {
     applianceInput.value = ''
     ustensilInput.value = ''
 
-    selectedTags = document.querySelectorAll('.tag-selected')
+   
 
     refreshTags()
     tagsSelection()
@@ -160,20 +161,18 @@ function displayTagSelected(e) {
 function filterByTag(e) {
     const userSearch = searchBarInput.value.toLowerCase()
     tagsSelected = document.querySelectorAll('.tag-selected')
-    
-    results = []
-    
+    newResults = []
     if (results.length == 0) results = recipes
     if(searchBarInput.value.length >= 3) filterBySearchBar(userSearch)
-    else results = recipes
+    else newResults = recipes
 
-    if (e == undefined) for (let i = 0; i < tagsSelected.length; i++) filterByTagType(results, tagsSelected[i], 'ingredientTagSelected', 'applianceTagSelected', 'ustensilTagSelected', tagsSelected[i].firstChild.textContent)
+    if (e == undefined) for (let i = 0; i < tagsSelected.length; i++) filterByTagType(newResults, tagsSelected[i], 'ingredientTagSelected', 'applianceTagSelected', 'ustensilTagSelected', tagsSelected[i].firstChild.textContent)
     else {
         let tagType = e.target
         filterByTagType(results, tagType, 'ingredientTag', 'applianceTag', 'ustensilTag', tagType.textContent)
     }
 
-    results = [...new Set(results)]
+    results = [...new Set(newResults)]
     results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
 
     if(!(e == undefined)) displayTagSelected(e)
@@ -209,10 +208,10 @@ function TagsSelectionDOM(tagCategorie, type) {
 }
 
 function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesClassTag, ustensilsClassTag, filterTag) {
-if (tagType.classList.contains(`${ingredientsClassTag}`)) results = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
-if (tagType.classList.contains(`${appliancesClassTag}`)) results = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
-if (tagType.classList.contains(`${ustensilsClassTag}`)) results = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
-}
+    if (tagType.classList.contains(`${ingredientsClassTag}`)) newResults = recipesArray.filter(recipe => ingredientsList(recipe, filterTag))
+    if (tagType.classList.contains(`${appliancesClassTag}`)) newResults = recipesArray.filter(recipe => recipe.appliance.includes(filterTag) && recipe.appliance.length == filterTag.length)
+    if (tagType.classList.contains(`${ustensilsClassTag}`)) newResults = recipesArray.filter(recipe => recipe.ustensils.includes(filterTag.toLowerCase()))
+    }
 
 //searchbar for tags
 function tagBarFilter(e)
@@ -292,3 +291,6 @@ function newTagArray(recipes) {
     appliancesTags = recipes.map(recipe => recipe.appliance)
     ustensilsTags = recipes.map(recipe => recipe.ustensils)
 }
+
+
+

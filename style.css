@@ -32,9 +32,7 @@ h1 {
     width: 90%;
 }
 
-#filters .form-control {
-    color: white;
-}
+
   
 .form-control {
     background-color: #E7E7E7;
@@ -66,6 +64,10 @@ h1 {
     background-color: #E7E7E7;
     box-shadow: none;
     border-color: transparent;
+}
+
+#filters .form-control {
+    color: white;
 }
 
 .tag-selected {
@@ -265,10 +267,10 @@ h2 {
 
 .tag {
     text-align: left;
-    font-size: 12px;
     color: white;
     pointer-events: all;
-    height: 20px;
+    height: 26px;
+    line-height: 12px;
 }
 
 .tag span {

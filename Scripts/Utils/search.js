@@ -38,6 +38,7 @@ function searchBarFilter()
         filterByTag()
     } else {
         filterBySearchBar(userSearch)
+        results = newResults
         results.sort((a, b) => (a.name > b.name) ? 1 : -1) 
     }
 
@@ -55,7 +56,7 @@ function searchBarFilter()
 function filterBySearchBar(userSearch) {
     //Algo Native Loop
     let resultsWithDuplicate = []
-    results = []
+    newResults = []
 
     //Loop to check all recipe
     for (let i = 0; i < recipes.length; i++) {
@@ -70,5 +71,5 @@ function filterBySearchBar(userSearch) {
         }   
     }
     //Remove duplicate
-    results = [...new Set(resultsWithDuplicate)]
+    newResults = [...new Set(resultsWithDuplicate)]
 }
