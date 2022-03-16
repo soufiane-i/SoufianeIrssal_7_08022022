@@ -19,6 +19,15 @@ let filtredIngredients = []
 let tagsSelected = []
 let selectedTags
 
+let ingredientsTags = []
+let ingredientsArray = []
+let appliancesTags = []
+let ustensilsTags = []
+let ustensilsArray = []
+let ustensilsTagsWDuplicates = []
+let ingredientsTagsWDuplicates = []
+let appliancesTagsWDuplicates = []
+
 //--------------------------------------------------------------------------------------------------
 
 function filterInit() {
@@ -217,14 +226,14 @@ function filterByTagType(recipesArray, tagType, ingredientsClassTag, appliancesC
 function tagBarFilter(e)
 {
     let userSearch
-    let ingredientsTags = []
-    let ingredientsArray = []
-    let appliancesTags = []
-    let ustensilsTags = []
-    let ustensilsArray = []
-    let ustensilsTagsWDuplicates = []
-    let ingredientsTagsWDuplicates = []
-    let appliancesTagsWDuplicates = []
+    ingredientsTags = []
+    ingredientsArray = []
+    appliancesTags = []
+    ustensilsTags = []
+    ustensilsArray = []
+    ustensilsTagsWDuplicates = []
+    ingredientsTagsWDuplicates = []
+    appliancesTagsWDuplicates = []
 
     if (results.length == 0) newTagArray(recipes)
     else newTagArray(results)
@@ -248,7 +257,7 @@ function tagBarFilter(e)
     if (e.target.id === ingredientInput.id) {
         userSearch = ingredientInput.value.toLowerCase()
         ingredientsTagsWDuplicates = ingredientsTagsWDuplicates.filter(el => el.toLowerCase().includes(userSearch)) 
-
+        
     } else if (e.target.id === applianceInput.id) {
         userSearch = applianceInput.value.toLowerCase()
         appliancesTagsWDuplicates = appliancesTagsWDuplicates.filter(el => el.toLowerCase().includes(userSearch)) 
