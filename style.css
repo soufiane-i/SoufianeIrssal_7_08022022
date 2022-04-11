@@ -230,7 +230,7 @@ h2 {
 }
 
 .card {
-    height: 45vh;
+    height: 43vh;
     
 }
 
@@ -253,6 +253,7 @@ h2 {
     -webkit-box-orient: vertical;
     background:#fff;
     max-height: 105px;
+    text-align: justify;
 }
 
 .tagChoiceContainer {
