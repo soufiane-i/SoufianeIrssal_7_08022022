@@ -230,7 +230,7 @@ h2 {
 }
 
 .card {
-    height: 50vh;
+    height: 45vh;
     
 }
 
@@ -257,7 +257,7 @@ h2 {
 
 .tagChoiceContainer {
     transform: translateY(10px) translateX(12px);
-    width: 44.2%;
+    width: 44.4%;
     max-height: 58vh;
     position: absolute;
     z-index: 1;
@@ -301,7 +301,7 @@ h2 {
 
 .imgRecipe {
     object-fit: cover;
-    height: 150px;
+    height: 200px;
 }
 
 .inputTag {
